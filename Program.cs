@@ -11,6 +11,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        //test git
         //******************* SQL Server DataBase Services *******************
         //***** Identity *****
         /*builder.Services.AddDbContext<IdentityDb>(opts =>
