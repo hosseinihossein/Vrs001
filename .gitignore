@@ -3,6 +3,5 @@ obj/
 */.vscode/
 todo.txt
 AppDocuments.txt
-TempFiles/
-Storage/
-Migrations/
+TempFiles/*
+Storage/*
