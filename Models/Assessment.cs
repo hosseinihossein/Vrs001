@@ -2018,14 +2018,19 @@ public class Assessment_Process
         {
             var oldPerformanceDbModels = await assessment_Db.Performances
             .Include(p => p.ExpertConsiderations)
-            .Where(p => p.RegisterDate != null && p.RegisterDate < oldDateTime)
+            .Where(p => p.RegisterDate != null &&
+                p.RegisterDate < oldDateTime)
             .ToListAsync();
 
             foreach (Assessment_PerformanceDbModel performanceDbModel in oldPerformanceDbModels)
             {
-                performanceDbModel.IsArchived = true;
-                await Performance_UpdateSeed(performanceDbModel);
-                assessment_Db.Performances.Remove(performanceDbModel);
+                if (performanceDbModel.OrderGuid == null ||
+                (await ordersDb.Orders.FirstOrDefaultAsync(o => o.Guid == performanceDbModel.OrderGuid)) == null)
+                {
+                    performanceDbModel.IsArchived = true;
+                    await Performance_UpdateSeed(performanceDbModel);
+                    assessment_Db.Performances.Remove(performanceDbModel);
+                }
             }
             await assessment_Db.SaveChangesAsync();
 
