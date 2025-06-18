@@ -1,0 +1,90 @@
+@model Regulations_FormModel
+@{
+    //ViewBag.Categories
+}
+<!------------------------------------------------------------------->
+<style>
+    #form-container {
+        width: 80%;
+        margin: auto;
+        border: 1px solid gray;
+        padding: 50px;
+        border-radius: 5px;
+    }
+
+    #form-container form label {
+        margin: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    #form-container form input,
+    #form-container form select {
+        margin: 10px;
+        font-size: 20px;
+        padding: 5px 10px;
+        min-width: 50%;
+    }
+
+    #form-container form textarea {
+        width: 60%;
+        margin: 40px 0px 20px 20%;
+        font-size: 16px;
+        padding: 5px 10px;
+        float: left;
+    }
+
+    #form-container form button[type=submit] {
+        cursor: pointer;
+        font-size: 24px;
+        background-color: white;
+        padding: 10px 20px;
+        border: 1px solid gray;
+        border-radius: 5px;
+    }
+
+    #form-container form button[type=submit]:hover {
+        color: green;
+    }
+
+    @@media screen and (max-width:800px) {
+        #form-container {
+            width: 100%;
+            padding: 20px;
+        }
+
+        #form-container form textarea {
+            width: 80%;
+        }
+    }
+</style>
+<div id="form-container">
+    <form asp-action="SubmitNewRegulation" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="All" style="color: red;"></div>
+        <div>
+            <label asp-for="RegulationFile">فایل دستورالعمل را انتخاب کنید:</label>
+            <input type="file" asp-for="RegulationFile" style="margin-right: 10px;">
+        </div>
+        <div>
+            <label asp-for="Category">دسته بندی دستورالعمل:</label>
+            <!--input type="text" asp-for="Category" placeholder="دسته بندی ..." style="margin-right: 84px;"-->
+            <select asp-for="Category" style="margin-right: 84px;" required>
+                @foreach (string category in ViewBag.Categories ?? Enumerable.Empty<string>())
+                {
+                    <option value="@category">@category</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label asp-for="Title">عنوان دستورالعمل را بنویسید:</label>
+            <input type="text" required asp-for="Title" placeholder="عنوان ..." style="margin-right: 40px;">
+        </div>
+        <div style="position: relative;">
+            <label asp-for="Brief" style="float:right;">توضیحات:</label>
+            <textarea asp-for="Brief" required rows="7" placeholder="توضیحات خلاصه"></textarea>
+        </div>
+        <div style="width: fit-content;margin: 50px auto 20px;">
+            <button type="submit">ثبت دستورالعمل <i class="fa-solid fa-file-arrow-up"></i></button>
+        </div>
+    </form>
+</div>

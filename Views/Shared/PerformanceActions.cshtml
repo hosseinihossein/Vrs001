@@ -1,0 +1,204 @@
+@model Assessment_Performance
+@{
+    DateTime currentDate = DateTime.Now;
+    CultureInfo localCulture = new CultureInfo("fa-IR"); // Example for Persian culture
+    string formattedDate = currentDate.ToString("yyyy/MM/dd", localCulture);
+    ViewBag.Experts = ViewBag.Experts ?? Enumerable.Empty<MyIdentityUser>();
+    //string branchTitle = Context.RequestServices.GetRequiredService<IConfiguration>()["BranchTitle"] ?? "اداره";
+    //ViewBag.Me
+
+}
+
+<!---------------------------------------------->
+@if ((User.Identity?.IsAuthenticated ?? false) &&
+//User.IsInRole("VP_Referrers") &&
+Model.ExpertConsiderations.Any(ec => ec.ConsiderationDate == null))
+{
+    var notConcidered = Model.ExpertConsiderations.Single(ec => ec.ConsiderationDate == null);
+
+    <hr class="placeholder-hr">
+    @if (notConcidered.VpReferrer?.UserGuid == notConcidered.ExpertReferee?.UserGuid)
+    {
+        <h3>این فرم در تاریخ "@notConcidered.ReferenceDate" به کارشناس
+            "@notConcidered.ExpertReferee?.FullName" ارجاع داده شد.</h3>
+    }
+    else
+    {
+        <h3>این فرم در تاریخ "@notConcidered.ReferenceDate" از طرف معاون "@notConcidered.VpReferrer?.FullName" به کارشناس
+            "@notConcidered.ExpertReferee?.FullName" ارجاع داده شد.</h3>
+    }
+
+}
+
+@if (User.Identity?.IsAuthenticated ?? false &&
+User.IsInRole("Expert_Referees") &&
+Model.ExpertConsiderations.Count > 0)
+{
+    @foreach (var ec in Model.ExpertConsiderations)
+    {
+        @if (ec.ConsiderationDate == null &&
+        ec.ExpertReferee?.UserName == User.Identity?.Name)
+        {
+            <form asp-action="SubmitExpertConsideration" method="post">
+                <h1 style="margin: 30px 0 10px 0;color: rgb(55, 0, 156);">نظر کارشناس</h1>
+                <input type="hidden" name="PerformanceGuid" value="@Model.Guid">
+                <input type="hidden" name="ExpertConsiderationGuid" value="@ec.Guid">
+                <div class="clearfix">
+                    <div class="input-box two">
+                        <label for="ExpertReferee">کارشناس بررسی کننده</label>
+                        <input disabled type="text" id="ExpertReferee" name="ExpertReferee" value="@ec.ExpertReferee?.FullName">
+                    </div>
+                    <div class="input-box two">
+                        <label for="ConsiderationDate">تاریخ بررسی </label>
+                        <input disabled type="text" id="ConsiderationDate" name="ConsiderationDate" value="@formattedDate">
+                    </div>
+                </div>
+                <div class="input-box one">
+                    <label>نظر کارشناس (فرم مستندات عملکرد بررسی گردید و ...)</label>
+                    <select required name="ExpertChoice" onchange="expertChoiceChange(this)">
+                        <option value=""></option>
+                        <option value="accept">مورد تایید اینجانب میباشد</option>
+                        <option value="reject">مورد تایید اینجانب نمیباشد و به اداره ثبت کننده برگشت
+                            داده میشود</option>
+                    </select>
+                </div>
+
+                <div class="button-container clearfix">
+                    <button type="submit" id="approveBtn" style="background-color: green;display:none;">ثبت تایید</button>
+                    <button type="submit" id="rejectBtn" style="background-color: red;display:none;">ثبت عدم تایید و
+                        مرجوع</button>
+                </div>
+            </form>
+        }
+    }
+}
+
+@if ((User.Identity?.IsAuthenticated ?? false) && User.Identity.Name != "admin" &&
+User.IsInRole("VP_Referrers") &&
+Model.Status == "vp")
+{
+    <hr class="placeholder-hr">
+    <form asp-action="SubmitExpertReferee">
+        <input type="hidden" name="PerformanceGuid" value="@Model.Guid">
+        <div class="input-box one">
+            <label>انتخاب کارشناس بررسی کننده</label>
+            <select name="ExpertUserName">
+                @foreach (MyIdentityUser myUser in ViewBag.Experts ?? Enumerable.Empty<MyIdentityUser>())
+                {
+                    <option value="@myUser.UserName">@myUser.FullName _ @myUser.Post _ @myUser.Branch</option>
+                }
+            </select>
+        </div>
+        <div class="button-container clearfix">
+            <button type="submit" style="background-color: lightseagreen;">
+                ارجاع به کارشناس
+            </button>
+        </div>
+    </form>
+}
+
+@if (User.Identity != null && User.Identity.IsAuthenticated && User.Identity.Name == "admin")
+{
+    <div class="button-container clearfix">
+        <a asp-action="EditPerformance" asp-route-performanceGuid="@Model.Guid">برگشت به معاونت</a>
+    </div>
+}
+else if ((User.Identity?.IsAuthenticated ?? false) && User.IsInRole("Performance_Confirmers") &&
+Model.Status == "confirm")
+{
+    <div class="button-container clearfix">
+        <a asp-action="ConfirmPerformnace" asp-route-performanceGuid="@Model.Guid" style="background-color: green;">تایید و
+            ارسال</a>
+        <a asp-action="NotConfirmPerformnace" asp-route-performanceGuid="@Model.Guid">برگشت به ویرایش</a>
+    </div>
+}
+else if ((User.Identity?.IsAuthenticated ?? false) && User.IsInRole("Performance_Registrars") &&
+Model.Status == "edit" && ViewBag.Me.UserGuid == Model.Registrar?.UserGuid)
+{
+    <div class="button-container clearfix">
+        <a asp-action="FinalSubmitPerformance" asp-route-performanceGuid="@Model.Guid" style="background-color: green;">ثبت
+            نهایی</a>
+        <a asp-action="EditPerformance" asp-route-performanceGuid="@Model.Guid">ویرایش</a>
+        <a asp-action="DeletePerformance" asp-route-performanceGuid="@Model.Guid"
+            style="background-color: red;float: left;">حذف</a>
+    </div>
+}
+else if ((User.Identity?.IsAuthenticated ?? false) && User.IsInRole("Performance_Registrars") &&
+Model.Status == "reject" && ViewBag.Me.UserGuid == Model.Registrar?.UserGuid)
+{
+    <div class="button-container clearfix">
+        <!--a href="" style="background-color: green;">ثبت نهایی</a-->
+        <a asp-action="EditPerformance" asp-route-performanceGuid="@Model.Guid">ویرایش</a>
+        <!--a href="" style="background-color: red;float: left;">حذف</a-->
+    </div>
+}
+
+
+<script>
+    function expertChoiceChange(element) {
+        if (element.value === "accept") {
+            //document.getElementById("return-textarea")?.remove();
+            let rateDiv = document.getElementById("performance-rate");
+            if (!rateDiv) {
+                rateDiv = document.createElement("div");
+                rateDiv.id = "performance-rate";
+                rateDiv.className = "input-box one";
+                rateDiv.innerHTML = `
+                        <label>امتیاز به عملکرد (امتیاز 1 بعنوان ضعیف ترین امتیاز و 10 بعنوان عالی ترین امتیاز میباشد)</label>
+                        <select name="Score" required>
+                            <option value="1">1 ضعیف ترین امتیاز</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5" selected>5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10 عالی ترین امتیاز</option>
+                        </select>
+                            `;
+            }
+            element.parentElement.after(rateDiv);
+
+            let returnTextArea = document.getElementById("return-textarea");
+            returnTextArea?.remove();
+            //if (!returnTextArea) {
+            returnTextArea = document.createElement("div");
+            returnTextArea.id = "return-textarea";
+            returnTextArea.className = "input-box one";
+            returnTextArea.innerHTML = `
+                        <label for="ExpertDescription">ملاحظات کارشناس </label>
+                        <textarea name="ExpertDescription" id="ExpertDescription"></textarea>
+                            `;
+            //}
+            rateDiv.after(returnTextArea);
+            document.getElementById("approveBtn").style.display = "inline-block";
+            document.getElementById("rejectBtn").style.display = "none";
+        }
+        else if (element.value === "reject") {
+            document.getElementById("performance-rate")?.remove();
+            let returnTextArea = document.getElementById("return-textarea");
+            returnTextArea?.remove();
+            //if (!returnTextArea) {
+            returnTextArea = document.createElement("div");
+            returnTextArea.id = "return-textarea";
+            returnTextArea.className = "input-box one";
+            returnTextArea.innerHTML = `
+                        <label for="ExpertDescription">ملاحظات کارشناس </label>
+                        <textarea name="ExpertDescription" id="ExpertDescription" required></textarea>
+                            `;
+            //}
+            element.parentElement.after(returnTextArea);
+            document.getElementById("approveBtn").style.display = "none";
+            document.getElementById("rejectBtn").style.display = "inline-block";
+        }
+        else {
+            document.getElementById("return-textarea")?.remove();
+            document.getElementById("performance-rate")?.remove();
+            document.getElementById("approveBtn").style.display = "none";
+            document.getElementById("rejectBtn").style.display = "none";
+        }
+    }
+
+</script>

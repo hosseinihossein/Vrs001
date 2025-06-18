@@ -1,0 +1,341 @@
+@model List<string>
+@{
+    string branchTitle = Context.RequestServices.GetRequiredService<IConfiguration>()["BranchTitle"] ?? "اداره";
+    string notifModalDisplay = Model.Any() ? "block" : "none";
+    int msgNotifNumber = Model.Count(s => s.Contains("msg_"));
+    int perfNotifNumber = Model.Count(s => s.Contains("perf_"));
+    int orderNotifNumber = Model.Count(s => s.Contains("order_"));
+}
+<!----------------------------------------- score table ----------------------------------------->
+<!--style>
+    #scoreTableTitle {
+        width: 90%;
+        margin: auto;
+        color: #111;
+    }
+
+    @@media screen and (max-width: 1200px) {
+        #scoreTableTitle {
+            width: 100%;
+        }
+    }
+</style>
+<h2 id="scoreTableTitle">برترین branchTitle های یک ماه اخیر</h2>
+<vc:score-table-component is-top-recent-branches="true" />
+
+<hr-->
+
+<!----------------------------------------- main image ----------------------------------------->
+
+<div id="mainImagea6dbf9c9b7c24820afff251eecb45448">
+    <style>
+        #mainImagea6dbf9c9b7c24820afff251eecb45448 {
+            width: 100%;
+            /*position: absolute;
+                top: 100px;
+                left: 0;
+                right: 0;*/
+            margin-top: 10px;
+            position: relative;
+        }
+
+        #mainImagea6dbf9c9b7c24820afff251eecb45448 img {
+            width: 100%;
+        }
+
+        #mainImagea6dbf9c9b7c24820afff251eecb45448 button {
+            position: relative;
+            top: -50px;
+            right: 20px;
+            font-size: 16px;
+        }
+    </style>
+    <img asp-append-version="true" src="/Images/HomeMainImage.jpg" alt="">
+    @if (User.Identity != null && User.Identity.IsAuthenticated && User.Identity.Name == "admin")
+    {
+        <button onclick="showModal(document.getElementById('mainImgModal'));">تغییر عکس</button>
+    }
+    <!--div style="position:absolute;top:100px;left:50px;font-size:24px;background-color:rgba(255,255,255,0.5);backdrop-filter:blur(5px);padding:20px;">
+        <p>سال اقتصاد جهشی تولید مقاومتی</p>
+        <p>دژمن را خشنود نکنین</p>
+        <P>(خامنه ای مدت الظله العالی)</p>
+    </div-->
+
+</div>
+<div id="modal-box">
+    <style>
+        #modal-box .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            width: 100%;
+            /*height: 100vh;*/
+            z-index: 2;
+        }
+
+        #modal-box .modal form {
+            width: fit-content;
+            margin: 100px auto;
+            background-color: white;
+            display: block;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        #modal-box .modal form input {
+            font-size: 16px;
+            padding: 5px 10px;
+            /*border-radius: 5px;
+        border: 1px solid gray;*/
+            width: 300px;
+        }
+
+        #modal-box .modal #close-btn {
+            font-size: 40px;
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            cursor: pointer;
+        }
+
+        #modal-box .modal #close-btn:hover {
+            color: red;
+        }
+
+        #modal-box .modal form input[type=submit] {
+            padding: 10px 20px;
+            color: blue;
+            font-size: 12px;
+            background-color: rgba(0, 0, 0, 0);
+            border-radius: 20px;
+            border: 1px solid blue;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        #modal-box .modal form input[type=submit]:hover {
+            background-color: rgba(135, 206, 235, 0.2);
+        }
+    </style>
+    <div class="modal" id="mainImgModal">
+        <span id="close-btn" onclick="hideModal(this.parentElement);">&times;</span>
+        <form asp-action="SubmitMainImage" method="post" enctype="multipart/form-data">
+            <div>
+                <label for="imgFile">عکس بنر اصلی:</label>
+                <input name="imgFile" id="imgFile" type="file">
+            </div>
+            <input type="submit" value="ثبت" style="display:block;width:fit-content;margin: 20px auto;">
+        </form>
+    </div>
+    <script>
+        function showModal(modalDiv) {
+            modalDiv.style.display = "block";
+        }
+        function hideModal(modalDiv) {
+            modalDiv.style.display = "none";
+        }
+    </script>
+</div>
+
+<!---------------------- notif modal ----------------------->
+<div id="notifModal">
+    <style>
+        /* Full-width input fields */
+        /*#notifModal textarea {
+            width: 80%;
+            max-width: 100%;
+            min-height: 200px;
+            padding: 12px 20px;
+            margin: 8px auto;
+            display: block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        #notifModal input[type=file] {
+            width: fit-content;
+            padding: 12px 20px;
+            margin: 8px auto;
+            display: block;
+            box-sizing: border-box;
+        }
+
+        #notifModal button {
+            background-color: #04AA6D;
+            color: white;
+            padding: 14px 20px;
+            width: 50%;
+            display: block;
+            margin: 8px auto;
+            border: none;
+            cursor: pointer;
+        }
+
+        #notifModal button:hover {
+            opacity: 0.8;
+        }
+
+        #notifModal span.psw {
+            float: right;
+            padding-top: 16px;
+        }*/
+
+        /* The Modal (background) */
+        #notifModal .modal {
+            display:
+                @(notifModalDisplay)
+            ;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        #notifModal .modal-content {
+            background-color: #fefefe;
+            margin: 50px auto 50px auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: fit-content;
+            max-height: calc(100vh - 160px);
+            /* Could be more or less, depending on screen size */
+            display: block;
+            padding: 0 50px 50px 50px;
+            overflow: auto;
+        }
+
+        /* The Close Button (x) */
+        #notifModal .close {
+            position: absolute;
+            right: 50px;
+            top: 50px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+        #notifModal .close:hover,
+        #notifModal .close:focus {
+            color: red;
+            cursor: pointer;
+        }
+
+        /* Add Zoom Animation */
+        #notifModal .animate {
+            -webkit-animation: animatezoom_notifModal 0.6s;
+            animation: animatezoom_notifModal 0.6s
+        }
+
+        @@-webkit-keyframes animatezoom_notifModal {
+            from {
+                -webkit-transform: scale(0)
+            }
+
+            to {
+                -webkit-transform: scale(1)
+            }
+        }
+
+        @@keyframes animatezoom_notifModal {
+            from {
+                transform: scale(0)
+            }
+
+            to {
+                transform: scale(1)
+            }
+        }
+
+        /* Change styles for span and cancel button on extra small screens */
+        /*@@media screen and (max-width: 600px) {
+            #notifModal span.psw {
+                display: block;
+                float: none;
+            }
+        }*/
+    </style>
+
+    <div class="modal">
+        <span onclick="this.parentElement.style.display = 'none';" class="close" title="Close Modal">&times;</span>
+        <ul class="modal-content">
+            <h2 style="text-align: center;">اعلانات</h2>
+            @if (msgNotifNumber > 0)
+            {
+                <li>شما @msgNotifNumber پیام ناخوانده دارید!</li>
+            }
+            @if (perfNotifNumber > 0)
+            {
+                <li>@perfNotifNumber عملکرد جدید در لیست شما قرار گرفت!</li>
+            }
+            @if (orderNotifNumber > 0)
+            {
+                <li>@orderNotifNumber درخواست جدید در لیست شما قرار گرفت!</li>
+            }
+
+        </ul>
+    </div>
+
+    <script>
+        /*function showNotifModal(element) {
+            let modal = document.getElementById("notifModal").getElementsByClassName("modal")[0];
+            modal.style.display = 'block';
+            //let descForm = document.getElementById("notifModal").querySelector("#description-modal-form");
+            //descForm.style.display = "block";
+            //let profileImgForm = document.getElementById("notifModal").querySelector("#profile-img-modal-form");
+            //profileImgForm.style.display = "none";
+            //descForm.getElementsByTagName("textarea")[0].value = element.previousElementSibling.innerText;
+            //textCounter(descForm.getElementsByTagName("textarea")[0]);
+        }*/
+        // When the user clicks anywhere outside of the modal, close it
+        window.addEventListener("click", (event) => {
+            let modal = document.getElementById("notifModal").getElementsByClassName("modal")[0];
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        });
+    </script>
+</div>
+
+<!----------------------------------------- score table ----------------------------------------->
+<hr>
+<style>
+    #scoreTableTitle {
+        width: 90%;
+        margin: auto;
+        color: #111;
+    }
+
+    @@media screen and (max-width: 1200px) {
+        #scoreTableTitle {
+            width: 100%;
+        }
+    }
+</style>
+<h2 id="scoreTableTitle">برترین @branchTitle های ماه گذشته</h2>
+<vc:score-table-component is-top-recent-branches="true" />
+
+<style>
+    body {
+        padding-bottom: 50px;
+    }
+</style>

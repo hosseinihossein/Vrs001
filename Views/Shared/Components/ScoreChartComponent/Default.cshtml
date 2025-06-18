@@ -1,0 +1,78 @@
+@model Assessment_ScoreChart
+@{
+    string branchTitle = Context.RequestServices.GetRequiredService<IConfiguration>()["BranchTitle"] ?? "اداره";
+    string allBranchesExpression = Model.Branch == null && Model.MyUser == null ? $"کل {branchTitle} ها" : "";
+    string branchExpression = Model.Branch != null ? branchTitle + " " + Model.Branch : "";
+    string userExpression = Model.MyUser != null ? "همکار " + $"{Model.MyUser.FullName}" : "";
+    string postExpression = Model.UserPost != null ? "سمت " + $"{Model.UserPost}" : "";
+    string fromDate = $"{Model.FromDate ?? "یک سال پیش"}";
+    string toDate = $"{Model.ToDate ?? "امروز"}";
+}
+<!----------------------->
+
+<div id="chartDiv">
+    <style>
+        #chartDiv {
+            width: 70%;
+            margin: auto;
+        }
+
+        @@media screen and (max-width: 1200px) {
+            #chartDiv {
+                width: 80%;
+            }
+        }
+
+        @@media screen and (max-width: 1000px) {
+            #chartDiv {
+                width: 100%;
+            }
+        }
+    </style>
+    <canvas id="myChart"></canvas>
+    <script src="/Codes/chart.js"></script>
+    <script>
+        let abe = "@Html.Raw(allBranchesExpression)";
+        let be = "@Html.Raw(branchExpression)";
+        let ue = "@Html.Raw(userExpression)";
+        let pe = "@Html.Raw(postExpression)";
+        let fd = "@Html.Raw(fromDate)";
+        let td = "@Html.Raw(toDate)";
+        const ctx = document.getElementById('myChart');
+        Chart.defaults.font.family = "shabnam";
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                @foreach (string yearMonth in Model.DateScore.Keys)
+                    {
+                        @:'@Html.Raw(yearMonth)',
+                    }
+                ],
+                datasets: [
+                    {
+                        label: 'امتیاز',
+                        data: [
+                            @foreach (var kv in Model.DateScore)
+                            {
+                                @:{ x: "@Html.Raw(kv.Key)", y: @kv.Value },
+                            }
+                        ],
+                        pointStyle: 'circle',
+                        pointRadius: 10,
+                        pointHoverRadius: 15
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: () => `نمودار امتیازات ${abe} ${be} ${ue} ${pe} از ${fd} تا ${td}`
+                    }
+                }
+            }
+        });
+    </script>
+</div>

@@ -1,0 +1,73 @@
+@model DisplayMediaModel
+
+<style>
+    body {
+        background-color: #111;
+    }
+</style>
+
+<!------------------------- title ------------------------->
+<style>
+    #displayFile-title {
+        color: white;
+        text-align: center;
+        margin: 10px auto;
+    }
+</style>
+<h3 id="displayFile-title">@Model.Title</h3>
+
+@if (Model.Category == "img")
+{
+    <!------------------------- image ------------------------->
+    <style>
+        #displayFile-img {
+            width: 100%;
+            height: calc(100vh - 100px);
+            object-fit: contain;
+            margin: auto;
+            cursor: zoom-in;
+        }
+    </style>
+    <img src="@Model.Src" alt="" id="displayFile-img" onclick="toggleZoom(this)">
+    <script>
+        let myImgZoomed = false;
+        function toggleZoom(myImg) {
+            if (myImgZoomed) {
+                myImg.style.height = "calc(100vh - 100px)";
+                myImg.style.cursor = "zoom-in";
+                myImgZoomed = false;
+            }
+            else {
+                myImg.style.height = "100%";
+                myImg.style.cursor = "zoom-out";
+                myImgZoomed = true;
+            }
+        }
+    </script>
+}
+else if (Model.Category == "video")
+{
+
+    <!------------------------- video ------------------------->
+    <style>
+        #displayFile-video {
+            width: 50%;
+            height: fit-content;
+            margin: auto;
+            display: block;
+        }
+    </style>
+    <video controls id="displayFile-video" src="@Model.Src" poster="@Model.VideoPoster">
+    </video>
+}
+
+<!------------------------- description ------------------------->
+<style>
+    #displayFile-description {
+        color: white;
+        text-align: center;
+        max-width: 90%;
+        margin: 10px auto 100px;
+    }
+</style>
+<p id="displayFile-description">@Model.Description</p>

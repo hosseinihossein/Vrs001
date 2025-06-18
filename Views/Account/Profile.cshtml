@@ -1,0 +1,424 @@
+@model Account_Profile
+@{
+    int solidStars = (int)Math.Floor(Model.AverageScore);
+    int halfStar = solidStars == Model.AverageScore ? 0 : 1;
+    int emptyStars = 10 - halfStar - solidStars;
+    string lastYearPersianDate = (DateTime.Today - TimeSpan.FromDays(365)).ToString("yyyy/MM/dd", new CultureInfo("fa-IR"));
+}
+<!------------------------------------------------------------------------->
+<div id="colleagues3b15c9dad43c4a68951fe248998766fc">
+    <style>
+        #colleagues3b15c9dad43c4a68951fe248998766fc {
+            padding: 50px;
+            border: 1px solid gray;
+            margin: 30px 0;
+            position: relative;
+        }
+    </style>
+
+    <!----------------------------------------- members ----------------------------------------->
+    <div class="clearfix" style="position: relative;">
+
+        <div class="img-box">
+            <style>
+                #colleagues3b15c9dad43c4a68951fe248998766fc .img-box {
+                    padding: 10px;
+                    box-shadow: 5px 5px 10px gray;
+                    /*max-width: 300px;*/
+                    width: 300px;
+                    float: right;
+                }
+            </style>
+            <img src="/Account/ClientImage?username=@(Model.MyUser.UserName)&v=@Model.MyUser.Version"
+                style="width: 100%;">
+            @if (User.Identity is not null && Model.MyUser.UserName == User.Identity.Name)
+            {
+                <button onclick="showModal_profile_img_form()">تغییر عکس</button>
+            }
+        </div>
+        <style>
+            #colleagues3b15c9dad43c4a68951fe248998766fc .title-box,
+            #colleagues3b15c9dad43c4a68951fe248998766fc .description-text-box,
+            #colleagues3b15c9dad43c4a68951fe248998766fc .star-box {
+                width: calc(100% - 400px);
+                float: right;
+                margin-right: 5vw;
+                font-size: 20px;
+            }
+        </style>
+        <div class="title-box clearfix">
+            <style>
+                @@media screen and (max-width:600px) {
+                    #colleagues3b15c9dad43c4a68951fe248998766fc .title-box {
+                        width: 100%;
+                        margin-right: 0;
+                    }
+                }
+            </style>
+            <p style="font-size: 20px;font-weight: bold;float: right;margin-left: 50px;">@Model.MyUser.FullName</p>
+            <p style="font-size: 20px;font-weight: bold;float: right;margin-left: 50px;">محل خدمت: @Model.MyUser.Branch
+            </p>
+            <p style="font-size: 20px;font-weight: bold;float: right;margin-left: 50px;">سمت: @Model.MyUser.Post</p>
+            @if (Model.MyUser.PerformanceField.Count > 0)
+            {
+                <p style="font-size: 20px;font-weight: bold;float: right;margin-left: 50px;">
+                    زمینه فعالیت:
+                    @foreach (string field in Model.MyUser.PerformanceField)
+                    {
+                        @field
+
+                        @:,
+                    }
+                </p>
+            }
+        </div>
+        <div class="clearfix star-box">
+            <style>
+                #colleagues3b15c9dad43c4a68951fe248998766fc .star-box div {
+                    direction: ltr;
+                    float: right;
+                }
+
+                #colleagues3b15c9dad43c4a68951fe248998766fc .star-box i {
+                    color: goldenrod;
+                }
+
+                @@media screen and (max-width:700px) {
+                    #colleagues3b15c9dad43c4a68951fe248998766fc .star-box {
+                        width: 100%;
+                        margin-right: 0;
+                        margin-top: 20px;
+                    }
+                }
+            </style>
+            <div>
+                @for (int i = 1; i <= solidStars; i++)
+                {
+                    <!--i class="fa-solid fa-star"></i-->
+                    <img src="~/Images/solidStar.png" style="width: 15px;height:15px">
+                }
+                @if (halfStar == 1)
+                {
+                    <!--i class="fa-solid fa-star-half-stroke"></i-->
+                    <img src="~/Images/halfStar.webp" style="width: 15px;height:15px">
+                }
+                @for (int i = 1; i <= emptyStars; i++)
+                {
+                    <!--i class="fa-regular fa-star"></i-->
+                    <img src="~/Images/emptyStar.png" style="width: 15px;height:15px">
+                }
+            </div>
+            <p style="margin: 0;padding: 0;float:right;">&ThickSpace;&ThickSpace;میانگین امتیازات:
+                <span>@Model.AverageScore.ToString("F")</span> از 10
+            </p>
+            <p style="margin: 0;padding: 0;float:right;">,&ThickSpace;&ThickSpace;کل امتیازات:
+                <span>@Model.TotalScore</span>
+            </p>
+        </div>
+        <div class="clearfix description-text-box">
+            <style>
+                #colleagues3b15c9dad43c4a68951fe248998766fc .description-text-box {
+                    color: rgb(29, 51, 51);
+                    text-align: start;
+                }
+
+                #colleagues3b15c9dad43c4a68951fe248998766fc .description-text-box pre {
+                    max-width: 100%;
+                    text-wrap: wrap;
+                }
+
+                @@media screen and (max-width:1000px) {
+                    #colleagues3b15c9dad43c4a68951fe248998766fc .description-text-box {
+                        width: 100%;
+                        margin-right: 0;
+                    }
+                }
+            </style>
+            @if (Model.MyUser.Description == null)
+            {
+                <pre>معرفی و توضیحات ...</pre>
+            }
+            else
+            {
+                <pre>@Model.MyUser.Description</pre>
+            }
+            @if (User.Identity is not null && Model.MyUser.UserName == User.Identity.Name)
+            {
+                <button onclick="showModal_description_form(this)">تغییر متن</button>
+            }
+        </div>
+
+        <div asp-validation-summary="All" style="color: red;"></div>
+        @if (User.Identity is not null && Model.MyUser.UserName == User.Identity.Name)
+        {
+            <div class="btn-container clearfix">
+                <style>
+                    #changePasswordBtn {
+                        padding: 10px;
+                        color: red;
+                        border: 1px solid red;
+                        background-color: white;
+                        text-decoration: none;
+                        float: left;
+                        cursor: pointer;
+                        border-radius: 0;
+                    }
+
+                    #changePasswordBtn:hover {
+                        color: white;
+                        background-color: red;
+                    }
+
+                    .btn-container a {
+                        padding: 10px;
+                        color: #111;
+                        border: 1px solid skyblue;
+                        background-color: white;
+                        text-decoration: none;
+                        cursor: pointer;
+                        border-radius: 5px;
+                    }
+
+                    .btn-container a:hover {
+                        /*color: white;*/
+                        background-color: lightblue;
+                    }
+                </style>
+                <a id="changePasswordBtn" asp-action="ChangePassword">تغییر پسورد</a>
+                <!--a href="">مشاهده همه سوابق</a-->
+            </div>
+        }
+    </div>
+    <!--hr style="margin: 50px 0;"-->
+    <vc:score-chart-component selected-user-guid="@Model.MyUser.UserGuid" from-date="@lastYearPersianDate" />
+
+    <style>
+        #hr-between-chart-table {
+            margin: 50px 0 30px;
+            position: relative;
+            overflow: visible;
+        }
+
+        #hr-between-chart-table::after {
+            content: "جدول سوابق عملکرد";
+            font-size: 14px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            translate: -50% -50%;
+            background-color: white;
+            border: 1px solid gray;
+            padding: 5px 10px;
+        }
+    </style>
+    <hr id="hr-between-chart-table">
+
+    <vc:score-table-component user-guid="@Model.MyUser?.UserGuid" show-search="true" />
+</div>
+<!------------------------------------------------------------------------------------------->
+<div id="form4f4c31de4c4b4b79bf3417f86269f530">
+    <style>
+        /* Full-width input fields */
+        #form4f4c31de4c4b4b79bf3417f86269f530 textarea {
+            width: 80%;
+            max-width: 100%;
+            min-height: 200px;
+            padding: 12px 20px;
+            margin: 8px auto;
+            display: block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        #form4f4c31de4c4b4b79bf3417f86269f530 input[type=file] {
+            width: fit-content;
+            padding: 12px 20px;
+            margin: 8px auto;
+            display: block;
+            box-sizing: border-box;
+        }
+
+        /* Set a style for all buttons */
+        #form4f4c31de4c4b4b79bf3417f86269f530 button {
+            background-color: #04AA6D;
+            color: white;
+            padding: 14px 20px;
+            width: 50%;
+            display: block;
+            margin: 8px auto;
+            border: none;
+            cursor: pointer;
+        }
+
+        #form4f4c31de4c4b4b79bf3417f86269f530 button:hover {
+            opacity: 0.8;
+        }
+
+        #form4f4c31de4c4b4b79bf3417f86269f530 span.psw {
+            float: right;
+            padding-top: 16px;
+        }
+
+        /* The Modal (background) */
+        #form4f4c31de4c4b4b79bf3417f86269f530 .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        #form4f4c31de4c4b4b79bf3417f86269f530 .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto 5% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 80%;
+            /* Could be more or less, depending on screen size */
+            display: none;
+        }
+
+        /* The Close Button (x) */
+        #form4f4c31de4c4b4b79bf3417f86269f530 .close {
+            position: absolute;
+            right: 50px;
+            top: 50px;
+            color: #000;
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+        #form4f4c31de4c4b4b79bf3417f86269f530 .close:hover,
+        #form4f4c31de4c4b4b79bf3417f86269f530 .close:focus {
+            color: red;
+            cursor: pointer;
+        }
+
+        /* Add Zoom Animation */
+        #form4f4c31de4c4b4b79bf3417f86269f530 .animate {
+            -webkit-animation: animatezoom_form4f4c31de4c4b4b79bf3417f86269f530 0.6s;
+            animation: animatezoom_form4f4c31de4c4b4b79bf3417f86269f530 0.6s
+        }
+
+        @@-webkit-keyframes animatezoom_form4f4c31de4c4b4b79bf3417f86269f530 {
+            from {
+                -webkit-transform: scale(0)
+            }
+
+            to {
+                -webkit-transform: scale(1)
+            }
+        }
+
+        @@keyframes animatezoom_form4f4c31de4c4b4b79bf3417f86269f530 {
+            from {
+                transform: scale(0)
+            }
+
+            to {
+                transform: scale(1)
+            }
+        }
+
+        /* Change styles for span and cancel button on extra small screens */
+        @@media screen and (max-width: 600px) {
+            #form4f4c31de4c4b4b79bf3417f86269f530 span.psw {
+                display: block;
+                float: none;
+            }
+        }
+    </style>
+
+    <div class="modal">
+        <span onclick="this.parentElement.style.display = 'none';" class="close" title="Close Modal">&times;</span>
+        <form id="description-modal-form" class="modal-content animate" asp-action="SubmitDescription" method="post">
+            <div style="padding: 16px;">
+                <label for="description"><b>معرفی و توضیحات:</b> (متن باید کمتر از 500 کاراکتر باشد!) تعداد
+                    کاراکتر:<span></span></label>
+                <!--input type="text" placeholder="Enter Username" name="uname" id="uname" required-->
+                <textarea name="description" id="description" style="font-size: 16px;"></textarea>
+                <button type="submit">ثبت</button>
+            </div>
+        </form>
+        <form id="profile-img-modal-form" class="modal-content animate" asp-action="SubmitClientImage" method="post"
+            enctype="multipart/form-data">
+            <div style="padding: 16px;">
+                <label for="clientImageFile"><b>عکس پروفایل (سایز عکس باید کمتر از 500 کیلوبایت باشد!):</b></label>
+                <input oninput="showThumbnail(this)" type="file" name="clientImageFile" id="clientImageFile">
+                <img src="" alt="" style="width: 300px;object-fit: contain;display: none;margin: auto;">
+                <button id="submit-btn" type="submit" style="display: none;">ثبت</button>
+                <button id="delete-btn" type="submit">حذف عکس فعلی</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function showModal_description_form(element) {
+            let modal = document.getElementById("form4f4c31de4c4b4b79bf3417f86269f530").getElementsByClassName("modal")[0];
+            modal.style.display = 'block';
+            let descForm = document.getElementById("form4f4c31de4c4b4b79bf3417f86269f530").querySelector("#description-modal-form");
+            descForm.style.display = "block";
+            let profileImgForm = document.getElementById("form4f4c31de4c4b4b79bf3417f86269f530").querySelector("#profile-img-modal-form");
+            profileImgForm.style.display = "none";
+            descForm.getElementsByTagName("textarea")[0].value = element.previousElementSibling.innerText;
+            textCounter(descForm.getElementsByTagName("textarea")[0]);
+        }
+        function showModal_profile_img_form() {
+            let modal = document.getElementById("form4f4c31de4c4b4b79bf3417f86269f530").getElementsByClassName("modal")[0];
+            modal.style.display = 'block';
+            let descForm = document.getElementById("form4f4c31de4c4b4b79bf3417f86269f530").querySelector("#description-modal-form");
+            descForm.style.display = "none";
+            let profileImgForm = document.getElementById("form4f4c31de4c4b4b79bf3417f86269f530").querySelector("#profile-img-modal-form");
+            profileImgForm.style.display = "block";
+        }
+        // When the user clicks anywhere outside of the modal, close it
+        window.addEventListener("click", (event) => {
+            let modal = document.getElementById("form4f4c31de4c4b4b79bf3417f86269f530").getElementsByClassName("modal")[0];
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        });
+        function showThumbnail(element) {
+            let deleteBtn = element.parentElement.querySelector("#delete-btn");
+            let submitBtn = element.parentElement.querySelector("#submit-btn");
+
+            if (element.files[0]) {
+                let showcaseImage = element.nextElementSibling;
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    showcaseImage.src = e.target.result;
+                };
+                reader.readAsDataURL(element.files[0]);
+                showcaseImage.style.display = "block";
+
+                deleteBtn.style.display = "none";
+                submitBtn.style.display = "block";
+            }
+            else {
+                let showcaseImage = element.nextElementSibling;
+                showcaseImage.src = "";
+                showcaseImage.style.display = "none";
+
+                deleteBtn.style.display = "block";
+                submitBtn.style.display = "none";
+            }
+        }
+        function textCounter(element) {
+            element.previousElementSibling.getElementsByTagName("span")[0].innerHTML = element.value.length;
+        }
+    </script>
+</div>

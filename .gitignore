@@ -1,0 +1,10 @@
+bin/
+obj/
+*/.vscode/
+todo.txt
+AppDocuments.txt
+TempFiles/
+Storage/
+appsettings.Development.json
+appsettings.json
+Migrations/

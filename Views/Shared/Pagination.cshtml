@@ -1,0 +1,109 @@
+@{
+    //ViewBag.LastPage ??= 1;
+    ViewBag.LastPage = ViewBag.LastPage == 0 ? 1 : ViewBag.LastPage;
+
+    string pageQuery = Context.Request.Query["page"].ToString();
+    if (!int.TryParse(pageQuery, out int currentPage))
+    {
+        currentPage = 1;
+    }
+
+    string display = "block";
+    if (currentPage == 1 && ViewBag.LastPage != null && ViewBag.LastPage == 1)
+    {
+        display = "none";
+    }
+}
+<!----------------------------------------------------------------->
+
+<style>
+    #paginatione6f6ceeec5f74afe96e4fc15a16000bb {
+        display: block;
+        width: fit-content;
+        margin: 50px auto;
+        border: 1px solid lightgray;
+    }
+
+    #paginatione6f6ceeec5f74afe96e4fc15a16000bb a {
+        color: black;
+        float: left;
+        padding: 8px 12px;
+        margin: 2px;
+        text-decoration: none;
+        border-radius: 5px;
+        min-width: 40px;
+        text-align: center;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    #paginatione6f6ceeec5f74afe96e4fc15a16000bb a#active {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    #paginatione6f6ceeec5f74afe96e4fc15a16000bb a.deactive {
+        cursor: default;
+    }
+
+    #paginatione6f6ceeec5f74afe96e4fc15a16000bb a:hover:not(#active):not(.deactive) {
+        background-color: #ddd;
+    }
+
+    #paginatione6f6ceeec5f74afe96e4fc15a16000bb form {
+        float: left;
+        background-color: lightgray;
+    }
+
+    #paginatione6f6ceeec5f74afe96e4fc15a16000bb form input,
+    #paginatione6f6ceeec5f74afe96e4fc15a16000bb form label {
+        float: left;
+        font-size: 16px;
+        padding: 8px 12px;
+        margin: 2px;
+    }
+
+    #paginatione6f6ceeec5f74afe96e4fc15a16000bb form input {
+        padding: 6px 12px;
+        width: 100px;
+    }
+</style>
+<div id="paginatione6f6ceeec5f74afe96e4fc15a16000bb" class="clearfix" style="display:@display;">
+    @if (currentPage > 1)
+    {
+        <a id="previous" onclick="previousPage()">»</a>
+    }
+    <a id="first" onclick="toPage(1)">1</a>
+    <form onsubmit="toPage(this.querySelector('#current-page-input').value);event.preventDefault();">
+        <input required type="number" min="1" max="@ViewBag.LastPage" name="page" id="current-page-input"
+            value="@currentPage"
+            onkeypress="if(event.key == 'Enter')if(this.value >= this.min && this.value <= this.max)this.parentElement.submit();">
+        <label for="current-page">صفحه:</label>
+    </form>
+    @if (ViewBag.LastPage != null)
+    {
+        <a id="last" onclick="toPage(@ViewBag.LastPage)">@ViewBag.LastPage</a>
+    }
+    @if (ViewBag.LastPage == null || ViewBag.LastPage > currentPage)
+    {
+        <a id="next" onclick="nextPage()">«</a>
+    }
+</div>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const currentPage = @currentPage;//params.get('page');
+
+    function previousPage() {
+        params.set("page", currentPage - 1);
+        window.location.href = `${window.location.pathname}?${params.toString()}`;
+    }
+    function nextPage() {
+        params.set("page", currentPage + 1);
+        window.location.href = `${window.location.pathname}?${params.toString()}`;
+    }
+    function toPage(page) {
+        params.set("page", page);
+        window.location.href = `${window.location.pathname}?${params.toString()}`;
+    }
+
+</script>

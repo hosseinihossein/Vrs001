@@ -1,0 +1,163 @@
+@model LoginModel
+<!---------------------------------------------------->
+<style>
+    * {
+        direction: ltr;
+    }
+</style>
+<style>
+    #form2b92044f3f544418a916a603c40cf879 {
+        width: 40vw;
+        /*min-height: 40vw;*/
+        /*background-color: red;*/
+        margin: auto;
+        color: white;
+        text-align: center;
+        position: relative;
+        padding: 6%;
+        /*border: 2px dashed black;*/
+    }
+
+    #form2b92044f3f544418a916a603c40cf879::after {
+        content: "";
+        background-color: rgb(0, 45, 56);
+        width: 0;
+        height: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-top: 20vw solid rgb(9, 51, 47);
+        border-left: 20vw solid rgb(9, 51, 47);
+        border-bottom: 20vw solid rgb(0, 45, 56);
+        border-right: 20vw solid rgb(0, 45, 56);
+        z-index: -1;
+    }
+
+    #form2b92044f3f544418a916a603c40cf879>h1 {
+        margin: 20px;
+        font-weight: bolder;
+    }
+
+    #form2b92044f3f544418a916a603c40cf879 form input {
+        color: rgb(0, 45, 56);
+        background-color: rgba(255, 255, 255, 0.6);
+        border: none;
+        border-radius: 30px;
+        width: 100%;
+        padding: 20px 20px;
+        margin: 20px 0;
+        font-size: 18px;
+        /*font-weight: 600;*/
+    }
+
+    #form2b92044f3f544418a916a603c40cf879 form input[type=submit] {
+        margin: 40px 0;
+        background-color: white;
+        font-size: 16px;
+        font-weight: 1000;
+        padding: 15px 20px;
+        cursor: pointer;
+    }
+
+    #form2b92044f3f544418a916a603c40cf879 form>div {
+        position: relative;
+    }
+
+    #form2b92044f3f544418a916a603c40cf879 form i,
+    #form2b92044f3f544418a916a603c40cf879 form img {
+        background-color: white;
+        /*color: rgb(0, 45, 56);
+        padding: 20px 22px;*/
+        border-radius: 50%;
+        position: absolute;
+        top: 22px;
+        /*font-size: 30px;*/
+    }
+
+    @@media screen and (max-width:1200px) {
+        #form2b92044f3f544418a916a603c40cf879 {
+            width: 50vw;
+        }
+
+        #form2b92044f3f544418a916a603c40cf879::after {
+            border-width: 25vw;
+        }
+    }
+
+    @@media screen and (max-width:1000px) {
+        #form2b92044f3f544418a916a603c40cf879 {
+            width: 60vw;
+        }
+
+        #form2b92044f3f544418a916a603c40cf879::after {
+            border-width: 30vw;
+        }
+    }
+
+    @@media screen and (max-width:800px) {
+        #form2b92044f3f544418a916a603c40cf879 {
+            width: 70vw;
+        }
+
+        #form2b92044f3f544418a916a603c40cf879::after {
+            border-width: 35vw;
+        }
+    }
+
+    @@media screen and (max-width:600px) {
+        #form2b92044f3f544418a916a603c40cf879 {
+            width: 80vw;
+        }
+
+        #form2b92044f3f544418a916a603c40cf879::after {
+            border-width: 40vw;
+        }
+    }
+
+    @@media screen and (max-width:500px) {
+        #form2b92044f3f544418a916a603c40cf879 {
+            width: 100vw;
+        }
+
+        #form2b92044f3f544418a916a603c40cf879::after {
+            border-width: 49vw;
+        }
+    }
+
+    @@media screen and (max-width:400px) {
+        #form2b92044f3f544418a916a603c40cf879::after {
+            border-width: 65vw 49vw;
+        }
+    }
+</style>
+<div id="form2b92044f3f544418a916a603c40cf879">
+    <h2>لطفا نام کاربری و پسورد خود را وارد کنید</h2>
+    <div asp-validation-summary="All" style="color: red;"></div>
+    <form asp-action="SubmitLogin" method="post">
+        <input type="hidden" asp-for="ReturnUrl">
+        <div>
+            <input asp-for="UsernameOrEmail" type="text" placeholder="نام کاربری" style="padding-left: 80px;">
+            <!--i class="fa-regular fa-user" style="left: 0;"></i-->
+            <img src="~/Images/loginUser.png" style="width: 60px;height:60px; left:0;">
+        </div>
+        <div>
+            <input asp-for="Password" type="text" placeholder="پسورد">
+            <!--i class="fa-solid fa-lock" style="right: 0;" onclick="toggleShowPassword(this)"></i-->
+            <img src="~/Images/loginPassword.png" style="width: 60px;height:60px; right:0;"
+                onclick="toggleShowPassword(this)">
+        </div>
+        <div>
+            <input type="submit" value="ورود">
+        </div>
+    </form>
+    <script>
+        function toggleShowPassword(element) {
+            if (element.previousElementSibling.type == "text") {
+                element.previousElementSibling.type = "password";
+            }
+            else {
+                element.previousElementSibling.type = "text";
+            }
+        }
+    </script>
+</div>

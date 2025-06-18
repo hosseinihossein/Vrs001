@@ -1,0 +1,290 @@
+@model Messages_NewMessageModel
+@{
+    //string toWhom = /*User.Identity?.Name == "admin"*/User.IsInRole("Message_To_All") ? "مخاطبان" : "ادمین";
+}
+<!---------------------------------------------------------------------->
+<style>
+    #form1d898ccb95204072a1885989d2a10412 {
+        width: 60%;
+        margin: auto;
+    }
+
+    #form1d898ccb95204072a1885989d2a10412 input[type=text],
+    #form1d898ccb95204072a1885989d2a10412 input[type=file],
+    #form1d898ccb95204072a1885989d2a10412 select,
+    #form1d898ccb95204072a1885989d2a10412 textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    #form1d898ccb95204072a1885989d2a10412 textarea {
+        resize: vertical;
+    }
+
+    #form1d898ccb95204072a1885989d2a10412 label {
+        padding: 12px 12px 12px 0;
+        display: inline-block;
+    }
+
+    #form1d898ccb95204072a1885989d2a10412 input[type=submit] {
+        background-color: #04AA6D;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        /*float: right;*/
+        width: 50%;
+        text-align: center;
+        margin: 20px auto;
+        margin-right: 25%;
+    }
+
+    #form1d898ccb95204072a1885989d2a10412 input[type=submit]:hover {
+        background-color: #45a049;
+    }
+
+    #form1d898ccb95204072a1885989d2a10412 {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+    }
+
+    #form1d898ccb95204072a1885989d2a10412 .col-25 {
+        float: right;
+        width: 25%;
+        margin-top: 6px;
+    }
+
+    #form1d898ccb95204072a1885989d2a10412 .col-75 {
+        float: right;
+        width: 75%;
+        margin-top: 6px;
+    }
+
+    @@media screen and (max-width: 800px) {
+        #form1d898ccb95204072a1885989d2a10412 {
+            width: 100%;
+        }
+    }
+
+    /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+    @@media screen and (max-width: 600px) {
+
+        #form1d898ccb95204072a1885989d2a10412 .col-25,
+        #form1d898ccb95204072a1885989d2a10412 .col-75,
+        #form1d898ccb95204072a1885989d2a10412 input[type=submit] {
+            width: 100%;
+            margin-top: 0;
+            margin-right: 0;
+        }
+    }
+</style>
+<div id="form1d898ccb95204072a1885989d2a10412">
+    <!--h2 style="text-align: center;">پیام به toWhom</h2-->
+    <form asp-action="SubmitNewMessage" method="post" enctype="multipart/form-data"
+        onsubmit="AJAXSubmit(this);event.preventDefault();return false;">
+        <div asp-validation-summary="All" style="color: red;" class="myAspValidationSummary"></div>
+        <input type="hidden" readonly name="ToUserGuids" value="" id="to-userGuids">
+        <div class="clearfix">
+            <div class="col-25">
+                <label>فرستنده:</label>
+            </div>
+            <div class="col-75">
+                <input type="text" disabled value="@Model.SenderUser.FullName">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="col-25">
+                <label>موضوع:</label>
+            </div>
+            <div class="col-75">
+                <input required type="text" name="Subject" placeholder="موضوع..">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="col-25">
+                <label>متن پیام:</label>
+            </div>
+            <div class="col-75">
+                <textarea required name="MessageText" placeholder="پیام خود را اینجا بنویسید.."
+                    style="height:200px"></textarea>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="col-25">
+                <label>فایل:</label>
+            </div>
+            <div class="col-75">
+                <input type="file" name="AttachedFile" id="file-input">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="col-25">
+                <label>مخاطبان:</label>
+            </div>
+            <div class="col-75">
+                <input type="text" required disabled id="to-fullnames" value="">
+            </div>
+        </div>
+
+        <br>
+        <div class="clearfix" style="width: 100%;">
+            <input type="submit" value="ارسال">
+        </div>
+    </form>
+    <script>
+        async function AJAXSubmit(oFormElement) {
+            let toUserGuidsInput = document.getElementById("to-userGuids");
+            if (!toUserGuidsInput || toUserGuidsInput.value.trim().length == 0) {
+                document.getElementsByClassName("myAspValidationSummary")[0].innerHTML =
+                    "مخاطب انتخاب نکرده اید!";
+                return;
+            }
+            const formData = new FormData(oFormElement);
+            let request = new XMLHttpRequest();
+
+            request.upload.addEventListener("progress", e => {
+                let fileSize = document.getElementById("file-input").files[0]?.size || 0;
+                //let fileImageSize = document.getElementById("file-image-input").files[0]?.size || 0;
+                //let wholeSize = fileSize + fileImageSize;
+
+                if (e.loaded <= fileSize) {
+                    let percent = Math.round(e.loaded / fileSize * 100);
+                    document.getElementById("myBar-loaded").style.width = percent + "%";
+                    document.getElementById("progress-percent").innerHTML = percent;
+                }
+                if (e.loaded == e.total) {
+                    document.getElementById("myBar-loaded").style.width = "100%";
+                    document.getElementById("progress-percent").innerHTML = "100";
+                }
+            });
+
+            request.onreadystatechange = () => {
+                //console.log("request.status: " + request.status);
+                if (request.readyState == XMLHttpRequest.DONE && request.status >= 200 && request.status < 400) {
+                    window.location.href = request.responseText;
+                }
+                else {
+                    console.log(request.responseText);
+                    document.getElementsByClassName("myAspValidationSummary")[0].innerHTML =
+                        request.responseText;
+                    document.getElementById("modal1213276e57b2420cb55e23702f8e24da").style.display = "none";
+                }
+            };
+
+            request.open("post", oFormElement.action);
+            request.setRequestHeader("RequestVerificationToken", getCookie('RequestVerificationToken'));
+            request.send(formData);
+
+            document.getElementById("modal1213276e57b2420cb55e23702f8e24da").style.display = "block";
+
+        }
+
+        function getCookie(name) {
+            let value = "; " + document.cookie;
+            let parts = value.split("; " + name + "=");
+            let myCookie;
+            if (parts.length == 2) {
+                myCookie = parts.pop().split(";").shift();
+            }
+            //console.log(`myCookieName: ${name}`);
+            //console.log(`myCookieValue: ${myCookie}`);
+
+            return myCookie;
+        }
+    </script>
+</div>
+<div id="modal1213276e57b2420cb55e23702f8e24da">
+    <style>
+        #modal1213276e57b2420cb55e23702f8e24da {
+            backdrop-filter: blur(5px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 1;
+            display: none;
+        }
+    </style>
+    <!--------------------------- spinner ---------------------------->
+    <style>
+        #m992017b8baba4208b747f40bd488dc69 {
+            width: fit-content;
+            margin: 35vh auto 0;
+            translate: 0 -50%;
+            text-align: center;
+        }
+
+        #m992017b8baba4208b747f40bd488dc69 .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin_m992017b8baba4208b747f40bd488dc69 2s linear infinite;
+            /* Safari */
+            animation: spin_m992017b8baba4208b747f40bd488dc69 2s linear infinite;
+        }
+
+        /* Safari */
+        @@-webkit-keyframes spin_m992017b8baba4208b747f40bd488dc69 {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes spin_m992017b8baba4208b747f40bd488dc69 {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <div id="m992017b8baba4208b747f40bd488dc69">
+        <div class="loader"></div>
+        در حال ارسال ...
+    </div>
+
+    <!----------------------------- progress bar ----------------------------->
+    <style>
+        #m5e9e3470935f47c6a63b7765d950f2cf {
+            width: 60%;
+            margin: auto;
+        }
+
+        #m5e9e3470935f47c6a63b7765d950f2cf #myProgress {
+            width: 100%;
+            background-color: #ddd;
+        }
+
+        #m5e9e3470935f47c6a63b7765d950f2cf #myBar-loaded {
+            width: 1%;
+            height: 30px;
+            background-color: #04AA6D;
+        }
+    </style>
+
+    <div id="m5e9e3470935f47c6a63b7765d950f2cf">
+        <div id="myProgress">
+            <div id="myBar-loaded"></div>
+        </div>
+        <p style="text-align: center;"><span id="progress-percent">1</span> %</p>
+    </div>
+
+
+</div>
+
+<!-------------------------------------------------->
+
+<partial name="ListOfUsers" model="@Model.UsersList" />

@@ -1,0 +1,440 @@
+@model Assessment_Performance
+@{
+    DateTime currentDate = DateTime.Now;
+    CultureInfo localCulture = new CultureInfo("fa-IR"); // Example for Persian culture
+    string formattedDate = currentDate.ToString("yyyy/MM/dd", localCulture);
+    ViewBag.Experts = ViewBag.Experts ?? Enumerable.Empty<MyIdentityUser>();
+    string branchTitle = Context.RequestServices.GetRequiredService<IConfiguration>()["BranchTitle"] ?? "اداره";
+    //ViewBag.Me
+
+}
+
+<!---------------------------------------------->
+<div id="cbc724a1a02c47dea6a722260c71d5ac">
+
+    <style>
+        #cbc724a1a02c47dea6a722260c71d5ac {
+            width: 80vw;
+            height: fit-content;
+            background-color: white;
+            margin: 50px auto 100px;
+            box-shadow: 0 0 3px lightgray;
+            padding: 20px;
+            position: relative;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac::before {
+            content: "مشاهده عملکرد";
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 0 3px lightgray;
+            padding: 10px 20px;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box {
+            border: 2px solid rgb(220, 220, 220, 0.5);
+            padding: 10px 15px;
+            border-radius: 5px;
+            float: right;
+            using Microsoft.IdentityModel.Tokens;
+            margin: 2%;
+            height: fit-content;
+            min-height: 75px;
+            background-color: white;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box a {
+            text-decoration: none;
+            display: block;
+            width: fit-content;
+            background-color: rgb(81, 29, 105);
+            color: white;
+            padding: 5px 10px;
+            margin: 20px auto;
+            border-radius: 5px;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box.one {
+            width: 96%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box.two {
+            width: 46%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box.three {
+            width: 29.3%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box label {
+            display: block;
+            width: 100%;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box label span {
+            float: left;
+            color: red;
+            font-size: 18px;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box input,
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box select,
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box textarea {
+            border: none;
+            padding: 10px 0 0 0;
+            font-size: 18px;
+            width: 100%;
+            max-width: 100%;
+            min-width: 100%;
+            color: #444;
+            /*text-transform: uppercase;*/
+        }
+
+        /*#cbc724a1a02c47dea6a722260c71d5ac .input-box textarea {
+                height: 200px;
+            }*/
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container {
+            width: 100%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container a,
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container button {
+            float: right;
+            padding: 15px 30px;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            background-color: rgb(105, 29, 105);
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin: 2%;
+            display: block;
+            width: 25%;
+            opacity: 0.8;
+            text-align: center;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container a {
+            background-color: gray;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container a:hover,
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container button:hover {
+            opacity: 1;
+        }
+
+        @@media screen and (max-width: 800px) {
+            #cbc724a1a02c47dea6a722260c71d5ac {
+                width: 100%;
+            }
+        }
+
+        @@media screen and (max-width: 600px) {
+
+            #cbc724a1a02c47dea6a722260c71d5ac .input-box.one {
+                width: 96%;
+            }
+
+            #cbc724a1a02c47dea6a722260c71d5ac .input-box.two {
+                width: 96%;
+            }
+
+            #cbc724a1a02c47dea6a722260c71d5ac .input-box.three {
+                width: 96%;
+            }
+        }
+    </style>
+
+    <form>
+        @if (Model.Order != null)
+        {
+            <div class="clearfix">
+                <div class="input-box one">
+                    <label>درخواست</label>
+                    <input readonly type="text"
+                        value="این عملکرد در پاسخ به درخواست همکار '@ViewBag.OrderRegistrarFullName' صورت گرفته است">
+                    <!--a asp-controller="Orders" asp-action="Open" asp-route-orderGuid="Model.Order.Guid">مشاهده درخواست</a-->
+                </div>
+            </div>
+        }
+        <div class="clearfix">
+            <div class="input-box three">
+                <label>نوع عملکرد</label>
+                <input readonly type="text" asp-for="PerformanceType">
+            </div>
+            <div class="input-box three">
+                <label>زمینه عملکرد</label>
+                <input readonly type="text" asp-for="PerformanceField">
+            </div>
+            <div class="input-box three">
+                <label>@branchTitle</label>
+                <input readonly type="text" asp-for="Branch">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box three">
+                <label>تاریخ انجام عملکرد </label>
+                <input readonly type="text" asp-for="PerformDate">
+            </div>
+            <div class="input-box three">
+                <label>تاریخ ثبت عملکرد </label>
+                <input readonly type="text" asp-for="RegisterDate">
+            </div>
+            <div class="input-box three">
+                <label>تاریخ تایید عملکرد </label>
+                <input readonly type="text" asp-for="ConfirmDate">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box three">
+                <label>رئیس اداره </label>
+                <input readonly type="text" value="@Model.Chief?.FullName">
+            </div>
+            <div class="input-box three">
+                <label>مدیر تایید کننده </label>
+                <input readonly type="text" value="@Model.Confirmer?.FullName">
+            </div>
+            <div class="input-box three">
+                <label>ثبت کننده </label>
+                <input readonly type="text" value="@Model.Registrar?.FullName">
+            </div>
+        </div>
+        <!--div class="clearfix">
+            <div class="input-box two">
+                <label>سمت رئیس</label>
+                <input readonly type="text" asp-for="ChiefPost">
+            </div>
+            <div class="input-box two">
+                <label>سمت ثبت کننده</label>
+                <input readonly type="text" asp-for="RegistrarPost">
+            </div>
+        </div-->
+        <div class="clearfix">
+            <div class="input-box one">
+                <label>وضعیت</label>
+                <input readonly type="text" value="@ViewBag.StatusDictionary[Model.Status]">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box one">
+                <label>موضوع عملکرد</label>
+                <input readonly type="text" asp-for="Subject">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box one">
+                <label>حاضرین</label>
+                <textarea readonly asp-for="Attendees"></textarea>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box one">
+                <label>محل</label>
+                <input readonly type="text" asp-for="EventPlace">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box two">
+                <label>ساعت شروع</label>
+                <input readonly type="text" asp-for="StartTime">
+            </div>
+            <div class="input-box two">
+                <label>ساعت پایان</label>
+                <input readonly type="text" asp-for="EndTime">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box one">
+                <label>شرح</label>
+                <textarea readonly asp-for="Description"></textarea>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box one">
+                <label>نظریه حراست</label>
+                <textarea readonly asp-for="SecurityOpinion"></textarea>
+            </div>
+        </div>
+        @if (Model.AttachedFileName != null)
+        {
+            <div class="clearfix">
+                <div class="input-box one">
+                    <label>فایل با نام "@Model.AttachedFileName" پیوست شده است.</label>
+                    <a asp-action="DownloadAttachedFile" asp-route-performanceGuid="@Model.Guid" download="">دانلود</a>
+                    @if (ViewBag.AttachedMediaFile)
+                    {
+                        <a asp-action="DisplayMedia" asp-route-performanceGuid="@Model.Guid" target="_blank">مشاهده رسانه</a>
+                    }
+                    else if (ViewBag.AttachedPdfFile)
+                    {
+                        <a asp-action="DownloadAttachedFile" asp-route-performanceGuid="@Model.Guid" target="_blank">مشاهده پی
+                            دی اف</a>
+                    }
+                </div>
+            </div>
+        }
+
+    </form>
+
+    <style>
+        #accordion001b383eb0bc47169304f8afa1f9a7e1 .accordion {
+            background-color: #eee;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: right;
+            outline: none;
+            font-size: 18px;
+            transition: 0.4s;
+            margin-top: 20px;
+        }
+
+        #accordion001b383eb0bc47169304f8afa1f9a7e1 .accordion.active,
+        #accordion001b383eb0bc47169304f8afa1f9a7e1 .accordion:hover {
+            background-color: #ccc;
+        }
+
+        #accordion001b383eb0bc47169304f8afa1f9a7e1 .panel {
+            padding: 0 18px;
+            background-color: white;
+            overflow: hidden;
+            max-height: 0;
+            transition: all 0.2s ease-out;
+            border: 1px solid #ccc;
+            font-size: 18px;
+        }
+
+        #accordion001b383eb0bc47169304f8afa1f9a7e1 .accordion:after {
+            content: '\02795';
+            /* Unicode character for "plus" sign (+) */
+            font-size: 13px;
+            color: #777;
+            float: left;
+            margin-left: 5px;
+        }
+
+        #accordion001b383eb0bc47169304f8afa1f9a7e1 .accordion.active:after {
+            content: "\2796";
+            /* Unicode character for "minus" sign (-) */
+        }
+    </style>
+
+    @if (Model.ExpertConsiderations.Count > 0 &&
+        Model.ExpertConsiderations.Any(ec => ec.ConsiderationDate != null))
+    {
+        <hr class="placeholder-hr">
+        <div id="accordion001b383eb0bc47169304f8afa1f9a7e1">
+            <h2 style="margin: 30px 0 10px 0;color: rgb(55, 0, 156);">سوابق کارشناسی</h2>
+            @foreach (var ec in Model.ExpertConsiderations)
+            {
+                @if (ec.ConsiderationDate != null)
+                {
+                    @if (ec.VpReferrer?.UserGuid == ec.ExpertReferee?.UserGuid)
+                    {
+                        <button class="accordion Script8145dfe532594b45aefd0a1782bed213">
+                            این فرم در تاریخ "@ec.ReferenceDate" به کارشناس
+                            "@ec.ExpertReferee?.FullName" ارجاع داده
+                            شد.
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="accordion Script8145dfe532594b45aefd0a1782bed213">
+                            این فرم در تاریخ "@ec.ReferenceDate"از طرف معاون "@ec.VpReferrer?.FullName" به کارشناس
+                            "@ec.ExpertReferee?.FullName" ارجاع داده
+                            شد.
+                        </button>
+                    }
+                    <div class="panel">
+                        <form>
+                            <div class="clearfix">
+                                <div class="input-box two">
+                                    <label>کارشناس بررسی کننده</label>
+                                    <input readonly type="text" value="@ec.ExpertReferee?.FullName">
+                                </div>
+                                <div class="input-box two">
+                                    <label>تاریخ بررسی</label>
+                                    <input readonly type="text" value="@ec.ConsiderationDate">
+                                </div>
+                            </div>
+                            @if (ec.IsRejected)
+                            {
+                                <div class="input-box one">
+                                    <label>نظر کارشناس</label>
+                                    <input readonly type="text" name="ExpertOpinion"
+                                        value="عملکرد بررسی گردید ولی مورد تایید اینجانب نمیباشد و به اداره ثبت کننده برگشت داده شد">
+                                </div>
+                                <div class="clearfix">
+                                    <div class="input-box one">
+                                        <label>ملاحظات کارشناس</label>
+                                        <textarea>@ec.ExpertDescription</textarea>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="clearfix">
+                                    <div class="input-box two">
+                                        <label>نظر کارشناس</label>
+                                        <input readonly type="text" name="ExpertOpinion"
+                                            value="عملکرد بررسی گردید و مورد تایید اینجانب میباشد">
+                                    </div>
+                                    <div class="input-box two">
+                                        <label for="SecurityOpinion">امتیاز کارشناس</label>
+                                        <input type="text" readonly value="@ec.Score">
+                                    </div>
+                                </div>
+                                <div class="clearfix">
+                                    <div class="input-box one">
+                                        <label>ملاحظات کارشناس</label>
+                                        <textarea>@ec.ExpertDescription</textarea>
+                                    </div>
+                                </div>
+                            }
+                        </form>
+                    </div>
+                }
+            }
+        </div>
+    }
+
+    <script>
+        let accordions_Script8145dfe532594b45aefd0a1782bed213 = document.getElementsByClassName("Script8145dfe532594b45aefd0a1782bed213");
+
+        for (let i = 0; i < accordions_Script8145dfe532594b45aefd0a1782bed213.length; i++) {
+            accordions_Script8145dfe532594b45aefd0a1782bed213[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                let panel = this.nextElementSibling;
+                if (parseInt(panel.style.maxHeight) > 0) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        }
+    </script>
+
+    <script>
+        let textAreas = document.getElementsByTagName("textarea");
+        for (let ta of textAreas) {
+            ta.style.height = "0";
+            ta.style.height = (ta.scrollHeight + 5) + "px";
+        }
+    </script>
+
+    <!----------------- actions ------------------->
+    <partial name="PerformanceActions" model="@Model" />
+
+
+</div>

@@ -1,0 +1,113 @@
+@model SignupModel
+@{
+    var configuration = Context.RequestServices.GetRequiredService<IConfiguration>();
+}
+
+<!------------------------------------------------------>
+<style>
+    #form7d70cebdf1e04b3185dd516ec2966d3e {
+        width: 60%;
+        margin: auto;
+    }
+
+    /* Add padding to containers */
+    #form7d70cebdf1e04b3185dd516ec2966d3e .container {
+        padding: 16px;
+    }
+
+    /* Full-width input fields */
+    #form7d70cebdf1e04b3185dd516ec2966d3e input[type=text],
+    #form7d70cebdf1e04b3185dd516ec2966d3e input[type=password],
+    #form7d70cebdf1e04b3185dd516ec2966d3e select {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #f1f1f1;
+        font-size: 18px;
+    }
+
+    #form7d70cebdf1e04b3185dd516ec2966d3e input[type=text]:focus,
+    #form7d70cebdf1e04b3185dd516ec2966d3e input[type=password]:focus {
+        background-color: #ddd;
+        outline: none;
+    }
+
+    /* Overwrite default styles of hr */
+    #form7d70cebdf1e04b3185dd516ec2966d3e hr {
+        border: 1px solid #f1f1f1;
+        margin-bottom: 25px;
+    }
+
+    /* Set a style for the submit/register button */
+    #form7d70cebdf1e04b3185dd516ec2966d3e .registerbtn {
+        background-color: #04AA6D;
+        color: white;
+        padding: 16px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+        font-size: 18px;
+    }
+
+    #form7d70cebdf1e04b3185dd516ec2966d3e .registerbtn:hover {
+        opacity: 1;
+    }
+
+    /* Add a blue text color to links */
+    #form7d70cebdf1e04b3185dd516ec2966d3e a {
+        color: dodgerblue;
+    }
+
+    /* Set a grey background color and center the text of the "sign in" section */
+    #form7d70cebdf1e04b3185dd516ec2966d3e .signin {
+        background-color: #f1f1f1;
+        text-align: center;
+    }
+</style>
+
+<div id="form7d70cebdf1e04b3185dd516ec2966d3e">
+    <form asp-action="SubmitSignup" method="post">
+        <div class="container">
+            <h1>ثبت نام</h1>
+            <p>لطفا اطلاعات مربوط به کاربر جدید را وارد کنید.</p>
+            <hr>
+            <div asp-validation-summary="All" style="color: red;"></div>
+
+            <label asp-for="FullName"><b>نام و نام خانوادگی</b></label>
+            <input asp-for="FullName" type="text" placeholder="نام و نام خانوادگی" id="FullName">
+
+            <label asp-for="Branch"><b>محل خدمت</b></label>
+            <!--input asp-for="Branch" type="text" placeholder="شعبه" id="Branch"-->
+            <select asp-for="Branch">
+                @foreach (string branch in configuration.GetSection("AllBranches").Get<List<string>>() ?? [])
+                {
+                    <option value="@branch">@branch</option>
+                }
+            </select>
+
+            <label asp-for="Post"><b>سمت</b></label>
+            <input asp-for="Post" type="text" placeholder="سمت" id="Post">
+
+            <label asp-for="Username"><b>نام کاربری (به انگلیسی)</b></label>
+            <input asp-for="Username" type="text" placeholder="Username" id="Username">
+
+            <label asp-for="Password"><b>پسورد (به انگلیسی)</b></label>
+            <input asp-for="Password" type="text" placeholder="Password" id="Password">
+
+            <label asp-for="RepeatPassword"><b>دوباره پسورد را وارد کنید (به انگلیسی)</b></label>
+            <input asp-for="RepeatPassword" type="text" placeholder="Repeat Password" id="RepeatPassword">
+            <hr>
+
+            <!--p>By creating an account you agree to our <a href="#">Terms &amp;amp; Privacy</a>.</p-->
+            <button type="submit" class="registerbtn">ثبت</button>
+        </div>
+
+        <div class="container signin">
+            <p>آیا قبلا ثبت نام کرده‌اید؟ <a asp-action="Login">ورود</a></p>
+        </div>
+    </form>
+</div>

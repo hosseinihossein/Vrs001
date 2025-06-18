@@ -1,0 +1,304 @@
+@model Orders_FormModel
+@{
+    var configuration = Context.RequestServices.GetRequiredService<IConfiguration>();
+
+    Dictionary<string, List<string>> AllPerformanveTypes = configuration
+    .GetSection("PerformanceTypes")
+    .Get<Dictionary<string, List<string>>>()
+    ?? [];
+
+    List<string> AllPerformanceFields = configuration
+    .GetSection("PerformanceFields").Get<List<string>>() ?? [];
+
+    List<string> AllBranches = configuration
+    .GetSection("AllBranches").Get<List<string>>() ?? [];
+}
+
+<div id="cbc724a1a02c47dea6a722260c71d5ac">
+    <link rel="stylesheet" type="text/css" href="/Codes/jalalidatepicker.min.css" />
+    <script type="text/javascript" src="/Codes/jalalidatepicker.min.js"></script>
+
+    <style>
+        #cbc724a1a02c47dea6a722260c71d5ac {
+            width: 80vw;
+            height: fit-content;
+            background-color: white;
+            margin: 50px auto;
+            box-shadow: 0 0 3px lightgray;
+            padding: 20px;
+            position: relative;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac::before {
+            content: "ثبت درخواست";
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 0 3px lightgray;
+            padding: 10px 20px;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box {
+            border: 2px solid rgb(220, 220, 220, 0.5);
+            padding: 10px 15px;
+            border-radius: 5px;
+            float: right;
+            margin: 2%;
+            height: fit-content;
+            min-height: 75px;
+            background-color: white;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .branch-box:hover {
+            background-color: rgb(245, 245, 245);
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .branch-btn-box {
+            /*border: 2px solid rgb(220, 220, 220, 0.5);*/
+            padding: 10px 15px;
+            border-radius: 5px;
+            float: right;
+            margin: 2%;
+            height: 75px;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .branch-btn {
+            border: 1px solid gray;
+            border-radius: 5px;
+            background-color: rgb(81, 29, 105);
+            color: white;
+            padding: 10px 20px;
+            font-size: 20px;
+            width: fit-content;
+            display: block;
+            margin: auto;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .branch-btn:hover {
+            opacity: 1;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box.one {
+            width: 96%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box.two {
+            width: 46%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box.three {
+            width: 29.3%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box label {
+            display: block;
+            width: 100%;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box label span {
+            float: left;
+            color: red;
+            font-size: 18px;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box input,
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box select,
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box textarea {
+            border: none;
+            padding: 10px 0 0 0;
+            font-size: 18px;
+            width: 100%;
+            max-width: 100%;
+            min-width: 100%;
+            color: #333;
+            /*text-transform: uppercase;*/
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box #branches-div label {
+            margin: 10px 10px 10px 20px;
+            display: inline-block;
+            color: #333;
+            width: fit-content;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box #branches-div input[type=checkbox] {
+            scale: 130%;
+            display: inline;
+            width: fit-content;
+            min-width: fit-content;
+            max-width: fit-content;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box select optgroup {
+            font-size: 14px;
+            color: #111;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box select option {
+            font-size: 16px;
+            color: #333;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container {
+            width: 100%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container a,
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container button {
+            float: right;
+            padding: 15px 30px;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            background-color: rgb(105, 29, 105);
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin: 2%;
+            display: block;
+            width: 25%;
+            opacity: 0.8;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container a {
+            background-color: gray;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container a:hover,
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container button:hover {
+            opacity: 1;
+        }
+
+        @@media only screen and (max-width: 800px) {
+            #cbc724a1a02c47dea6a722260c71d5ac {
+                width: 100%;
+            }
+        }
+
+        @@media only screen and (max-width: 600px) {
+
+            #cbc724a1a02c47dea6a722260c71d5ac .input-box.one {
+                width: 96%;
+            }
+
+            #cbc724a1a02c47dea6a722260c71d5ac .input-box.two {
+                width: 96%;
+            }
+
+            #cbc724a1a02c47dea6a722260c71d5ac .input-box.three {
+                width: 96%;
+            }
+        }
+    </style>
+
+    <form id="form_cbc724a1a02c47dea6a722260c71d5ac" asp-action="SubmitNewOrder" method="post">
+        <div class="clearfix">
+            <div class="input-box one">
+                <label for="Registrar">ثبت کننده درخواست</label>
+                <input disabled type="text" id="Registrar" name="Registrar" value="@ViewBag.MeFullName">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box two">
+                <label asp-for="PerformanceType">نوع عملکرد</label>
+                <select required asp-for="PerformanceType">
+                    @foreach (var kv in AllPerformanveTypes)
+                    {
+                        <optgroup label="@kv.Key">
+                            @foreach (string pt in kv.Value)
+                            {
+                                <option value="@pt">@pt</option>
+                            }
+                        </optgroup>
+                    }
+                </select>
+            </div>
+            <div class="input-box two">
+                <label asp-for="PerformanceField">زمینه عملکرد</label>
+                <select required asp-for="PerformanceField">
+                    @foreach (string pf in AllPerformanceFields)
+                    {
+                        <option value="@pf">@pf</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box two">
+                <label for="RegisterDate">تاریخ ثبت درخواست</label>
+                <input disabled type="text" data-jdp id="RegisterDate" name="RegisterDate"
+                    value="@DateTime.Today.ToString("yyyy/MM/dd", new CultureInfo("fa-IR"))">
+            </div>
+            <div class="input-box two" style="border-color: rgba(255, 0, 0, 0.5);">
+                <label asp-for="Deadline">مهلت انجام درخواست</label>
+                <input required type="text" data-jdp asp-for="Deadline" value="">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box one">
+                <label asp-for="Subject">موضوع درخواست</label>
+                <input required type="text" asp-for="Subject" value="">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box one">
+                <label asp-for="Description">شرح درخواست</label>
+                <textarea required asp-for="Description"></textarea>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box one">
+                <label>اداره ها (اداره های مربوطه را انتخاب بفرمایید)</label>
+                <div id="branches-div">
+                    @foreach (string branch in AllBranches)
+                    {
+                        <label for="@branch">
+                            @if (Model.Branches.Contains(branch))
+                            {
+                                <input type="checkbox" checked name="Branches[]" id="@branch" value="@branch">
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="Branches[]" id="@branch" value="@branch">
+                            }
+                            @branch
+                        </label>
+                    }
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--script>
+            function toggleValue(element) {
+                if (element.checked) {
+                    element.value = element.id;
+                }
+                else {
+                    element.value = "";
+                }
+            }
+        </script-->
+
+    <hr id="last-hr">
+    <div asp-validation-summary="All" style="color: red;"></div>
+
+    <div class="button-container clearfix">
+        <button type="submit" form="form_cbc724a1a02c47dea6a722260c71d5ac">ثبت</button>
+        <a asp-action="Index">لغو</a>
+    </div>
+    <script>
+        jalaliDatepicker.startWatch({
+            //minDate: "attr",
+            //maxDate: "attr"
+            persianDigits: true,
+        });
+    </script>
+</div>

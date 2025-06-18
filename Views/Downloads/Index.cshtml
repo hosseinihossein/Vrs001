@@ -1,0 +1,258 @@
+@model List<Downloads_FileDbModel>
+@{
+    /*string active_all = ViewBag.ActiveCategory == "all" ? "active" : string.Empty;
+    string active_pics = ViewBag.ActiveCategory == "عکس" ? "active" : string.Empty;
+    string active_videos = ViewBag.ActiveCategory == "ویدیو" ? "active" : string.Empty;
+    string active_forms = ViewBag.ActiveCategory == "فرم" ? "active" : string.Empty;
+    string active_softs = ViewBag.ActiveCategory == "نرم افزار" ? "active" : string.Empty;
+    string active_pdfs = ViewBag.ActiveCategory == "مقاله" ? "active" : string.Empty;*/
+}
+<!----------------------------------------------------------------->
+<style>
+    /* Center website */
+    #main6ab050e66af043c7878b427540a67992 {
+        /*max-width: 1000px;*/
+        width: 90%;
+        margin: auto;
+        position: relative;
+    }
+
+    #main6ab050e66af043c7878b427540a67992 h1 {
+        font-size: 50px;
+        word-break: break-all;
+    }
+
+    #main6ab050e66af043c7878b427540a67992 .row {
+        margin: 8px -16px;
+        /*height: 300px;*/
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    /* Add padding BETWEEN each column (if you want) */
+    #main6ab050e66af043c7878b427540a67992 .row,
+    #main6ab050e66af043c7878b427540a67992 .row>.column {
+        padding: 8px;
+    }
+
+    /* Create three equal columns that floats next to each other */
+    #main6ab050e66af043c7878b427540a67992 .column {
+        float: left;
+        width: 30%;
+        display: block;
+        /* Hide columns by default */
+        margin: auto;
+        position: relative;
+    }
+
+    #main6ab050e66af043c7878b427540a67992 .column:hover {
+        background-color: #ddd;
+    }
+
+    #main6ab050e66af043c7878b427540a67992 .column img {
+        /*height: 100px;*/
+        max-height: 200px;
+        /*min-height: 200px;*/
+        width: 100%;
+        object-fit: contain;
+    }
+
+    /* Content */
+    #main6ab050e66af043c7878b427540a67992 .content {
+        background-color: white;
+        padding: 10px;
+        /*position: relative;*/
+        max-height: 300px;
+        overflow: hidden;
+    }
+
+    #main6ab050e66af043c7878b427540a67992 .content h4 {
+        margin: 10px 0;
+        padding: 0;
+        float: right;
+    }
+
+    #main6ab050e66af043c7878b427540a67992 .content .rating {
+        float: right;
+        padding: 10px 0px 0 0;
+    }
+
+    #main6ab050e66af043c7878b427540a67992 .content .rating span {
+        margin-left: 5px;
+        font-size: 14px;
+    }
+
+    #main6ab050e66af043c7878b427540a67992 .content .rating span i {
+        font-size: 18px;
+    }
+
+    #main6ab050e66af043c7878b427540a67992 .content .slide-up {
+        width: 100%;
+        padding: 5px;
+        transition: all 0.3s;
+        margin: 0px 0;
+    }
+
+    #main6ab050e66af043c7878b427540a67992 .content:hover .slide-up {
+        transform: translateY(calc(0px - 100%));
+        background-color: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(5px);
+    }
+
+    #main6ab050e66af043c7878b427540a67992 .content .slide-up a {
+        text-decoration: none;
+        color: #222;
+        background-color: rgb(191, 237, 255);
+        border: 1px solid white;
+        border-radius: 20px;
+        padding: 5px 10px;
+    }
+
+    #main6ab050e66af043c7878b427540a67992 .content .slide-up a:hover {
+        /*background-color: lawngreen;*/
+        border-color: lawngreen;
+    }
+
+    #main6ab050e66af043c7878b427540a67992 .content .slide-up a.delete-btn:hover {
+        /*background-color: red;*/
+        border-color: red;
+    }
+
+    /* Style the buttons */
+    #main6ab050e66af043c7878b427540a67992 .btn {
+        border: none;
+        outline: none;
+        padding: 8px 12px;
+        background-color: white;
+        cursor: pointer;
+        font-size: 14px;
+        text-decoration: none;
+        color: #333;
+        text-wrap: nowrap;
+        display: inline-block;
+    }
+
+    /* Add a grey background color on mouse-over */
+    #main6ab050e66af043c7878b427540a67992 .btn:hover {
+        background-color: #ddd;
+    }
+
+    /* Add a dark background color to the active button */
+    #main6ab050e66af043c7878b427540a67992 .btn.active {
+        background-color: #666;
+        color: white;
+    }
+
+    @@media screen and (max-width:800px) {
+        #main6ab050e66af043c7878b427540a67992 .column {
+            width: 45%;
+        }
+    }
+
+    @@media screen and (max-width:450px) {
+        #main6ab050e66af043c7878b427540a67992 .column {
+            width: 80%;
+        }
+    }
+</style>
+
+<div id="main6ab050e66af043c7878b427540a67992" class="clearfix">
+    <!----------------------------------------- add regulation ----------------------------------------->
+    <div>
+        <style>
+            .addNewFile-btn {
+                font-size: 24px;
+                text-decoration: none;
+                border: 1px solid gray;
+                padding: 5px 10px;
+                border-radius: 5px;
+                margin: 50px;
+                display: block;
+                width: fit-content;
+            }
+
+            .addNewFile-btn:hover {
+                color: lawngreen;
+            }
+
+            #hr5012ee2da3a449a78539e32f813e132c {
+                margin: 50px 0;
+                overflow: visible;
+                position: relative;
+            }
+
+            #hr5012ee2da3a449a78539e32f813e132c::after {
+                content: "@(Html.Raw(ViewBag.ActiveCategory == "all" ? "همه فایل" : ViewBag.ActiveCategory)) ها (@Model.Count)";
+                position: absolute;
+                top: -15px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-weight: bold;
+                border: 1px solid gray;
+                background-color: white;
+                padding: 5px 10px;
+            }
+        </style>
+        @if (User.IsInRole("Downloads_Admins"))
+        {
+            <a asp-action="AddFile" class="addNewFile-btn">
+                <i class="fa-solid fa-square-plus"></i> <span style="font-size: 16px;font-weight: bold;">
+                    اضافه کردن فایل جدید</span>
+            </a>
+        }
+        <hr id="hr5012ee2da3a449a78539e32f813e132c">
+    </div>
+    <h2>دانلودها</h2>
+    <div id="myBtnContainer">
+        <a asp-action="Index" class="btn @(ViewBag.ActiveCategory == "all" ? "active" : string.Empty)">همه</a>
+        @foreach (string category in ViewBag.Categories ?? Enumerable.Empty<string>())
+        {
+            <a asp-action="Index" asp-route-category="@category"
+                class="btn @(ViewBag.ActiveCategory == category ? "active" : string.Empty)">@category ها</a>
+        }
+    </div>
+
+    <!-- Portfolio Gallery Grid -->
+    <div class="row clearfix">
+        @foreach (Downloads_FileDbModel file in Model)
+        {
+            <div class="column">
+                <div class="content">
+                    @if (file.Category == "عکس" || file.Category == "ویدیو")
+                    {
+                        <a asp-action="DisplayMedia" asp-route-fileGuid="@file.Guid" target="_blank">
+                            <img src="~/Downloads/FileImage?fileGuid=@(file.Guid)">
+                        </a>
+                    }
+                    else if (file.Category == "مقاله")
+                    {
+                        <a asp-action="Download" asp-route-fileGuid="@file.Guid" target="_blank">
+                            <img src="~/Downloads/FileImage?fileGuid=@(file.Guid)">
+                        </a>
+                    }
+                    else
+                    {
+                        <img src="~/Downloads/FileImage?fileGuid=@(file.Guid)">
+                    }
+                    <div class="clearfix">
+                        <h4>@file.Title</h4>
+                    </div>
+                    <div class="slide-up clearfix">
+                        <p>@file.Description</p>
+                        <a asp-action="Download" asp-route-fileGuid="@file.Guid" download="" style="float:right;">دریافت</a>
+                        @if (User.IsInRole("Downloads_Admins"))
+                        {
+                            <a class="delete-btn" asp-action="DeleteFile" asp-route-fileGuid="@file.Guid"
+                                style="float:left;">حذف</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        <!-- END GRID -->
+    </div>
+
+</div>
+<!---------------- Pagination ----------------->
+<partial name="Pagination" />

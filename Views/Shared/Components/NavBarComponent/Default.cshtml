@@ -1,0 +1,293 @@
+@model MyIdentityUser?
+@{
+    bool newMessagesNotif = Model is not null && Model.Notifications.Any(n => n.Contains("msg_"));
+    bool newPerformanceNotif = Model is not null && Model.Notifications.Any(n => n.Contains("perf_"));
+    bool newOrderNotif = Model is not null && Model.Notifications.Any(n => n.Contains("order_"));
+    bool accountBell = newMessagesNotif || newPerformanceNotif || newOrderNotif;
+    var configuration = Context.RequestServices.GetRequiredService<IConfiguration>();
+    var currentUrl = Context.Request.GetEncodedUrl();
+    ViewBag.AllRelatedUsers = ViewBag.AllRelatedUsers ?? new List<MyIdentityUser>();
+}
+<!---------------------------------------------------------->
+<!--------------------------------------- header ------------------------------------------->
+
+<div id="headerbce54a4e200b47f4a58283a8dd4f75b2" class="header clearfix">
+    <style>
+        #headerbce54a4e200b47f4a58283a8dd4f75b2 {
+            background-color: rgb(36, 36, 102);
+            /*height: 100px;*/
+            /*position: absolute;
+                left: 0;*/
+            width: 100%;
+
+        }
+
+        #headerbce54a4e200b47f4a58283a8dd4f75b2 img {
+            float: left;
+        }
+    </style>
+    <img asp-append-version="true" src="/Images/iran-flag.png" alt="" style="width: 150px;">
+    <img asp-append-version="true" src="/Images/logo.png" alt=""
+        style="height: 80px;width: 100px;background-color: white;
+            float: right;margin-left: 10px; margin-right: 3px; border: 1px solid gray;margin-top: 3px;background-color: transparent;">
+    <img asp-append-version="true" src="/Images/shoar1403.png" alt="" style="margin-left: 10px;margin-top: 5px;">
+
+    <!---------------------------------------  ------------------------------------------->
+    <style>
+        #central-office-p {
+            color: white;
+            using Microsoft.AspNetCore.Http.Extensions;
+            using Microsoft.AspNetCore.Http.Extensions;
+            font-size: 24px;
+            position: absolute;
+            left: 50vw;
+            transform: translateX(-50%);
+            top: 0px;
+            width: fit-content;
+            /*background-color: rgb(36, 36, 102);
+            margin: 30px 0 0 0;
+            padding: 0;*/
+        }
+
+        @@media screen and (max-width:1200px) {
+            #central-office-p {
+                top: -20px;
+            }
+        }
+
+        @@media screen and (max-width:800px) {
+            #central-office-p {
+                left: 65vw;
+            }
+        }
+
+        @@media screen and (max-width:600px) {
+            #central-office-p {
+                left: 50vw;
+                top: 60px;
+            }
+        }
+    </style>
+    <p id="central-office-p" class="iran-nastaliq">@configuration["NavBarTitle"]</p>
+    <!--------------------------------------- main menu ------------------------------------------->
+
+    <div class="mainmenu clearfix">
+        <style>
+            #headerbce54a4e200b47f4a58283a8dd4f75b2 .mainmenu {
+                /*background-color: #cfcfcf;*/
+                width: fit-content;
+                float: right;
+                /*border: 1px solid gray;*/
+            }
+        </style>
+
+
+        <style>
+            .af087666d9a3a44c0af4059baa12e712a {
+                background-color: rgba(0, 0, 0, 0);
+                border: none;
+                color: white;
+                padding: 16px;
+                /*15px 32px;*/
+                text-align: center;
+                text-decoration: none;
+                display: block;
+                font-size: 16px;
+                /*margin: 4px 2px;*/
+                cursor: pointer;
+                float: right;
+                margin: 30px 1px 0;
+            }
+
+            .af087666d9a3a44c0af4059baa12e712a:hover {
+                background-color: #3e8e41;
+            }
+        </style>
+        <a asp-controller="Home" asp-action="Index" class="af087666d9a3a44c0af4059baa12e712a">
+            خانه
+        </a>
+
+        <style>
+            .dropdown920b9a8f2556431397c7c19e2a4d4418 {
+                position: relative;
+                display: inline-block;
+                margin: 30px 1px 0;
+            }
+
+            .dropdown920b9a8f2556431397c7c19e2a4d4418 .dropbtn {
+                background-color: rgba(0, 0, 0, 0);
+                color: white;
+                padding: 16px;
+                font-size: 16px;
+                border: none;
+                /*cursor: pointer;*/
+                display: block;
+                text-decoration: none;
+            }
+
+            .dropdown920b9a8f2556431397c7c19e2a4d4418 .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f9f9f9;
+                min-width: 160px;
+                max-width: 350px;
+                width: fit-content;
+                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                z-index: 1;
+            }
+
+            .dropdown920b9a8f2556431397c7c19e2a4d4418 .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+            .dropdown920b9a8f2556431397c7c19e2a4d4418 .dropdown-content a:hover {
+                background-color: #cfcfcf
+            }
+
+            .dropdown920b9a8f2556431397c7c19e2a4d4418:hover .dropdown-content {
+                display: block;
+            }
+
+            .dropdown920b9a8f2556431397c7c19e2a4d4418:hover .dropbtn {
+                background-color: #3e8e41;
+            }
+        </style>
+        @if (configuration["ServiceActivity:Colleagues"] == "true")
+        {
+            <div class="dropdown920b9a8f2556431397c7c19e2a4d4418" style="float: right;">
+                <a asp-controller="Colleagues" asp-action="Index" class="dropbtn">همکاران</a>
+                <div class="dropdown-content" style="right: 0;max-height: calc(100vh - 100px);overflow:auto;">
+                    @foreach (string branch in configuration.GetSection("AllBranches").Get<List<string>>() ?? [])
+                    {
+                        <a asp-controller="Colleagues" asp-action="Index" asp-route-branch="@branch">@branch</a>
+                    }
+                </div>
+            </div>
+        }
+        @if (configuration["ServiceActivity:Regulations"] == "true")
+        {
+            <div class="dropdown920b9a8f2556431397c7c19e2a4d4418" style="float: right;">
+                <a asp-controller="Regulations" asp-action="Index" class="dropbtn">دستورالعمل ها</a>
+                <div class="dropdown-content" style="right: 0;">
+                    @foreach (string category in ViewBag.RegulationCategories ?? Enumerable.Empty<string>())
+                    {
+                        <a asp-controller="Regulations" asp-action="Index" asp-route-category="@category">@category</a>
+                    }
+                </div>
+            </div>
+        }
+        @if (configuration["ServiceActivity:Downloads"] == "true")
+        {
+            <div class="dropdown920b9a8f2556431397c7c19e2a4d4418" style="float: right;">
+                <a asp-controller="Downloads" asp-action="Index" class="dropbtn">دانلودها</a>
+                <div class="dropdown-content" style="right: 0;">
+                    @foreach (string category in ViewBag.DownloadCategories ?? Enumerable.Empty<string>())
+                    {
+                        <a asp-controller="Downloads" asp-action="Index" asp-route-category="@category">@category</a>
+                    }
+                </div>
+            </div>
+        }
+
+
+    </div>
+    @if (User.Identity == null || !User.Identity.IsAuthenticated)
+    {
+        <a asp-controller="Account" asp-action="Login" class="af087666d9a3a44c0af4059baa12e712a" style="float: left;">
+            ورود
+        </a>
+    }
+    else
+    {
+        <div class="dropdown920b9a8f2556431397c7c19e2a4d4418" style="float: left;">
+            <img class="profile-img" src="/Account/ClientImage?username=@(Model?.UserName)&v=@(Model?.Version)" alt=""
+                style="width: 50px;height:50px;border-radius:50%;float:right;">
+            <button class="dropbtn" style="position: relative;">
+                @Model?.FullName
+                @if (accountBell)
+                {
+                    <span style="display: block;color:red;position:absolute;top:0;left:0;font-size: 14px;">
+                        &starf;
+                    </span>
+                }
+            </button>
+            <div class="dropdown-content" style="right: 0;max-height: calc(100vh - 100px);overflow:auto;">
+                @if (((List<MyIdentityUser>)ViewBag.AllRelatedUsers).Count > 0)
+                {
+                    string currentBranchPost = $"{Model?.Branch}_{Model?.Post}";
+                    @foreach (MyIdentityUser relatedUser in ViewBag.AllRelatedUsers)
+                    {
+                        string bp = $"{relatedUser.Branch}_{relatedUser.Post}";
+                        @if (currentBranchPost == bp)
+                        {
+                            <a style="background-color: lawngreen;font-size:14px;text-wrap: nowrap;">
+                                <input type="radio" checked />
+                                @bp
+                            </a>
+                        }
+                        else
+                        {
+                            <a style="font-size:14px;text-wrap: nowrap;" asp-controller="Account" asp-action="SwitchSubUser"
+                                asp-route-userGuid="@relatedUser.UserGuid" asp-route-returnUrl="@currentUrl">
+                                <input type="radio" style="cursor: pointer;" onclick="this.parentElement.click();" />
+                                @bp
+                            </a>
+
+                        }
+                    }
+                }
+                <a asp-controller="Account" asp-action="Profile">پروفایل</a>
+                @if (configuration["ServiceActivity:Messages"] == "true")
+                {
+                    <a asp-controller="Messages" asp-action="Index" style="position: relative;">
+                        پیامها
+                        @if (newMessagesNotif)
+                        {
+                            <span style="display: block;color:red;position:absolute;top:10px;left:10px;">
+                                &starf;
+                            </span>
+                        }
+                    </a>
+                }
+                <a asp-controller="Assessment" asp-action="Index" style="position: relative;">
+                    عملکردها
+                    @if (newPerformanceNotif)
+                    {
+                        <span style="display: block;color:red;position:absolute;top:10px;left:10px;">
+                            &starf;
+                        </span>
+                    }
+                </a>
+
+                <a asp-controller="Orders" asp-action="Index" style="position: relative;">
+                    درخواست ها
+                    @if (newOrderNotif)
+                    {
+                        <span style="display: block;color:red;position:absolute;top:10px;left:10px;">
+                            &starf;
+                        </span>
+                    }
+                </a>
+                <!--a asp-controller="Orders" asp-action="ReportPerformances" style="position: relative;">
+                                                    گزارش عملکرد همه توابع به درخواست ها
+                                                </a-->
+                <a asp-controller="Assessment" asp-action="ScoreList">سوابق و امتیازات</a>
+                @if (User.IsInRole("Account_Admins"))
+                {
+                    <a asp-controller="Account" asp-action="UsersList">کاربران</a>
+                    <a asp-controller="Account" asp-action="RolesList">دسترسی ها</a>
+                }
+                @if (User.Identity.Name == "admin")
+                {
+                    <a asp-controller="AppAdministration" asp-action="Backup">بکاپ</a>
+                }
+
+                <a asp-controller="Account" asp-action="Logout">خروج</a>
+            </div>
+        </div>
+    }
+
+</div>

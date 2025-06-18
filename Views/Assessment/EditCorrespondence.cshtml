@@ -1,0 +1,257 @@
+@model Assessment_CorrespondenceForm
+
+<div id="cbc724a1a02c47dea6a722260c71d5ac">
+    <link rel="stylesheet" type="text/css" href="/Codes/jalalidatepicker.min.css" />
+    <script type="text/javascript" src="/Codes/jalalidatepicker.min.js"></script>
+
+    <style>
+        #cbc724a1a02c47dea6a722260c71d5ac {
+            width: 80vw;
+            height: fit-content;
+            background-color: white;
+            margin: 50px auto;
+            box-shadow: 0 0 3px lightgray;
+            padding: 20px;
+            position: relative;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac::before {
+            content: "ویرایش عملکرد";
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 0 3px lightgray;
+            padding: 10px 20px;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box {
+            border: 2px solid rgb(220, 220, 220, 0.5);
+            padding: 10px 15px;
+            border-radius: 5px;
+            float: right;
+            margin: 2%;
+            height: fit-content;
+            min-height: 75px;
+            background-color: white;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .branch-box:hover {
+            background-color: rgb(245, 245, 245);
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .branch-btn-box {
+            /*border: 2px solid rgb(220, 220, 220, 0.5);*/
+            padding: 10px 15px;
+            border-radius: 5px;
+            float: right;
+            margin: 2%;
+            height: 75px;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .branch-btn {
+            border: 1px solid gray;
+            border-radius: 5px;
+            background-color: rgb(81, 29, 105);
+            color: white;
+            padding: 10px 20px;
+            font-size: 20px;
+            width: fit-content;
+            display: block;
+            margin: auto;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .branch-btn:hover {
+            opacity: 1;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box.one {
+            width: 96%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box.two {
+            width: 46%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box.three {
+            width: 29.3%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box label {
+            display: block;
+            width: 100%;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box label span {
+            float: left;
+            color: red;
+            font-size: 18px;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box input,
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box select,
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box textarea {
+            border: none;
+            padding: 10px 0 0 0;
+            font-size: 18px;
+            width: 100%;
+            max-width: 100%;
+            min-width: 100%;
+            color: gray;
+            /*text-transform: uppercase;*/
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container {
+            width: 100%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container a,
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container button {
+            float: right;
+            padding: 15px 30px;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            background-color: rgb(105, 29, 105);
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin: 2%;
+            display: block;
+            width: 25%;
+            opacity: 0.8;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container a {
+            background-color: gray;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container a:hover,
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container button:hover {
+            opacity: 1;
+        }
+
+        @@media only screen and (max-width: 800px) {
+            #cbc724a1a02c47dea6a722260c71d5ac {
+                width: 100%;
+            }
+        }
+
+        @@media only screen and (max-width: 600px) {
+
+            #cbc724a1a02c47dea6a722260c71d5ac .input-box.one {
+                width: 96%;
+            }
+
+            #cbc724a1a02c47dea6a722260c71d5ac .input-box.two {
+                width: 96%;
+            }
+
+            #cbc724a1a02c47dea6a722260c71d5ac .input-box.three {
+                width: 96%;
+            }
+        }
+    </style>
+
+    <form id="form_cbc724a1a02c47dea6a722260c71d5ac" asp-action="SubmitCorrespondenceForm" method="post">
+        <input type="hidden" asp-for="Guid">
+        <div class="clearfix">
+            <div class="input-box three">
+                <label>نوع عملکرد</label>
+                <input disabled type="text" asp-for="PerformanceType">
+            </div>
+            <div class="input-box three">
+                <label>زمینه عملکرد</label>
+                <input disabled type="text" asp-for="PerformanceField">
+            </div>
+            <div class="input-box three">
+                <label>تاریخ ثبت عملکرد</label>
+                <input disabled type="text" asp-for="RegisterDate">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box three">
+                <label>اداره</label>
+                <input disabled type="text" asp-for="Branch">
+            </div>
+            <div class="input-box three">
+                <label>رئیس اداره</label>
+                <input disabled type="text" asp-for="ChiefFullName">
+            </div>
+            <div class="input-box three">
+                <label>ثبت کننده </label>
+                <input disabled type="text" asp-for="RegistrarFullName">
+            </div>
+        </div>
+        <!--div class="clearfix">
+            <div class="input-box two">
+                <label>سمت رئیس</label>
+                <input disabled type="text" asp-for="ChiefPost">
+            </div>
+            <div class="input-box two">
+                <label>سمت ثبت کننده</label>
+                <input disabled type="text" asp-for="RegistrarPost">
+            </div>
+        </div-->
+        <div class="clearfix">
+            <div class="input-box one">
+                <label asp-for="LetterSubject">موضوع نامه</label>
+                <input type="text" asp-for="LetterSubject">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box two">
+                <label asp-for="LetterDate">تاریخ نامه</label>
+                <input type="text" data-jdp asp-for="LetterDate">
+            </div>
+            <div class="input-box two">
+                <label asp-for="LetterNumber">شماره نامه</label>
+                <input type="text" asp-for="LetterNumber">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box one">
+                <label asp-for="Receiver">گیرنده</label>
+                <input type="text" asp-for="Receiver">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box two">
+                <label asp-for="ReportDate">تاریخ گزارش</label>
+                <input type="text" data-jdp asp-for="ReportDate">
+            </div>
+            <div class="input-box two">
+                <label asp-for="ReportNumber">شماره گزارش</label>
+                <input type="text" asp-for="ReportNumber">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box one">
+                <label asp-for="Description">شرح اقدام</label>
+                <textarea asp-for="Description"></textarea>
+            </div>
+        </div>
+    </form>
+
+    <div asp-validation-summary="All" style="color: red;"></div>
+    <hr id="last-hr">
+
+    <div class="button-container clearfix">
+        <button type="submit" form="form_cbc724a1a02c47dea6a722260c71d5ac">ثبت</button>
+        <a asp-action="Performance" asp-route-guid="@Model.Guid">لغو</a>
+    </div>
+    <script>
+        jalaliDatepicker.startWatch({
+            //minDate: "attr",
+            //maxDate: "attr"
+            persianDigits: true,
+        });
+    </script>
+</div>

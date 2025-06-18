@@ -1,0 +1,219 @@
+@model Assessment_ScoreList
+@{
+    string branchTitle = Context.RequestServices.GetRequiredService<IConfiguration>()["BranchTitle"] ?? "اداره";
+    var configuration = Context.RequestServices.GetRequiredService<IConfiguration>();
+}
+<!-------------------------------------------------->
+
+<link rel="stylesheet" type="text/css" href="/Codes/jalalidatepicker.min.css" />
+<script type="text/javascript" src="/Codes/jalalidatepicker.min.js"></script>
+
+<div id="button-container" class="clearfix">
+    <style>
+        #button-container {
+            width: 90%;
+            margin: auto;
+        }
+
+        @@media screen and (max-width: 1200px) {
+            #button-container {
+                width: 100%;
+            }
+        }
+
+        #button-container a,
+        #button-container button {
+            /*float: right;*/
+            padding: 10px 10px;
+            color: white;
+            font-size: 14px;
+            /*font-weight: 500;*/
+            background-color: rgb(105, 29, 105);
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            margin: 10px;
+            display: inline-block;
+            width: fit-content;
+            opacity: 0.8;
+            text-align: center;
+        }
+
+        /*#button-container a {
+                    background-color: gray;
+                }*/
+
+        #button-container a:hover,
+        #button-container button:hover {
+            opacity: 1;
+        }
+
+        #button-container input,
+        #button-container select {
+            padding: 10px 10px;
+            border-radius: 5px;
+            border: 1px solid gray;
+            width: 150px;
+        }
+    </style>
+    <!--a href="" style="float: left;">ثبت عملکرد جدید</a-->
+    <!--a href="" style="float: left;background-color: lightseagreen;">مشاهده عملکردهای ثبت شده</a>
+            <a href="" style="float: left;background-color: lightseagreen;">مشاهده عملکردهای تایید شده</a-->
+
+    <form asp-action="ScoreList" method="get">
+        <select name="Branch">
+            <option value="">همه @branchTitle ها</option>
+            @foreach (string branch in configuration.GetSection("AllBranches").Get<List<string>>() ?? [])
+            {
+                @if (branch == Model.Branch)
+                {
+                    <option value="@branch" selected>@branch</option>
+                }
+                else
+                {
+                    <option value="@branch">@branch</option>
+                }
+            }
+        </select>
+        @if (Model.MyUser is not null)
+        {
+            <input type="hidden" name="UserGuid" value="@Model.MyUser?.UserGuid">
+        }
+        <input type="text" asp-for="UserPost" placeholder="سمت..">
+        <input type="text" data-jdp asp-for="FromDate" placeholder="از تاریخ..">
+        <input type="text" data-jdp asp-for="ToDate" placeholder="تا تاریخ..">
+        <button type="submit">جستجو</button>
+    </form>
+
+    <style>
+        .title-for-list {
+            background-color: white;
+            width: fit-content;
+            margin: 5px 0;
+            padding: 1px;
+            color: #111;
+        }
+
+        .title-for-list span {
+            background-color: rgba(255, 165, 0, 0.5);
+        }
+    </style>
+    <p class="title-for-list">
+        نمودار امتیازهای اخذ شده توسط
+        <!--span>ثبت شده</span-->
+        <!--span>تایید شده</span-->
+        @if (Model.MyUser is null && Model.Branch is null)
+        {
+            <span>کل @branchTitle ها</span> @:,
+        }
+        @if (Model.MyUser is not null)
+        {
+            <span>@Model.MyUser.FullName</span> @:,
+        }
+        @if (Model.Branch != null)
+        {
+            <span>@branchTitle @Model.Branch</span> @:,
+        }
+        @if (Model.UserPost != null)
+        {
+            <span>سمت @Model.UserPost</span> @:,
+        }
+        @if (Model.FromDate == null)
+        {
+            <span>از یک سال پیش</span> @:,
+        }
+        else
+        {
+            <span>از تاریخ @Model.FromDate</span> @:,
+        }
+        @if (Model.ToDate == null)
+        {
+            <span>تا امروز</span>
+        }
+        else
+        {
+            <span>تا تاریخ @Model.ToDate</span>
+        }
+    </p>
+</div>
+
+<!---------------------------- component ---------------------------->
+<vc:score-chart-component selected-branch="@Model.Branch" selected-user-guid="@Model.MyUser?.UserGuid"
+    selected-post="@Model.UserPost" from-date="@Model.FromDate" to-date="@Model.ToDate" />
+
+<style>
+    #hr-between-chart-table {
+        margin: 50px 0 30px;
+        position: relative;
+        overflow: visible;
+    }
+
+    #hr-between-chart-table::after {
+        content: "جدول سوابق عملکرد";
+        font-size: 14px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        translate: -50% -50%;
+        background-color: white;
+        border: 1px solid gray;
+        padding: 5px 10px;
+    }
+</style>
+<hr id="hr-between-chart-table">
+
+    <p class="title-for-list">
+        لیست امتیازهای اخذ شده توسط
+        <!--span>ثبت شده</span-->
+        <!--span>تایید شده</span-->
+        @if (Model.MyUser is null && Model.Branch is null)
+        {
+            <span>کل @branchTitle ها</span> @:,
+        }
+        @if (Model.MyUser is not null)
+        {
+            <span>@Model.MyUser.FullName</span> @:,
+        }
+        @if (Model.Branch != null)
+        {
+            <span>@branchTitle @Model.Branch</span> @:,
+        }
+        @if (Model.UserPost != null)
+        {
+            <span>سمت @Model.UserPost</span> @:,
+        }
+        @if (Model.FromDate == null)
+        {
+            <span>از ابتدا</span> @:,
+        }
+        else
+        {
+            <span>از تاریخ @Model.FromDate</span> @:,
+        }
+        @if (Model.ToDate == null)
+        {
+            <span>تا امروز</span>
+        }
+        else
+        {
+            <span>تا تاریخ @Model.ToDate</span>
+        }
+    </p>
+
+<vc:score-table-component branch="@Model.Branch" user-guid="@Model.MyUser?.UserGuid" user-post="@Model.UserPost"
+    from-date="@Model.FromDate" to-date="@Model.ToDate" show-search="true" />
+
+<script>
+    jalaliDatepicker.startWatch({
+        //minDate: "attr",
+        //maxDate: "attr"
+        persianDigits: true,
+    });
+</script>
+
+<style>
+    body {
+        padding-bottom: 50px;
+    }
+</style>

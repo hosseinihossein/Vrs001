@@ -1,0 +1,68 @@
+@{
+    var configuration = Context.RequestServices.GetRequiredService<IConfiguration>();
+    ViewBag.Title = ViewBag.Title ?? configuration["MainLayoutTitle"];
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <!--link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"-->
+    <style>
+        @@font-face {
+            font-family: shabnam;
+            src: url(/Fonts/Shabnam.woff2);
+        }
+
+        @@font-face {
+            font-family: shabnam;
+            src: url(/Fonts/Shabnam-Bold.woff2);
+            font-weight: bold;
+        }
+
+        /* IranNastaliq Custom Font by fontchi.com */
+        @@font-face {
+            font-family: 'IranNastaliq';
+            src: url('/Fonts/IranNastaliq.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            box-sizing: border-box;
+            outline: 0;
+            font-family: shabnam, Helvetica, Arial, sans-serif;
+            direction: rtl;
+        }
+
+        .iran-nastaliq {
+            font-family: IranNastaliq, Helvetica, Arial, sans-serif;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        body {
+            font-size: 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!---------------------------- navbar ---------------------------->
+    <vc:nav-bar-component />
+    <!-------------------------------------------------------->
+    @RenderBody()
+    <!-------------------------------------------------------->
+    <!-------------------------------------------------------->
+</body>
+
+</html>

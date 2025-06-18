@@ -1,0 +1,289 @@
+@model Assessment_NewPerformance
+<!----------------------------------------------------------------->
+<div id="ac80b6a0325e4ec0b29019aefc556128" class="Scriptd5b6b606f4934bdd8c8850bd3f2937ff clearfix">
+    <style>
+        #ac80b6a0325e4ec0b29019aefc556128 {
+            width: 60%;
+            min-width: 300px;
+            margin: 0 1%;
+            float: right;
+        }
+
+        @@media screen and (max-width:800px) {
+            #ac80b6a0325e4ec0b29019aefc556128 {
+                width: 100%;
+                float: none;
+            }
+        }
+
+        /* Style the tab */
+        #ac80b6a0325e4ec0b29019aefc556128 .links {
+            float: right;
+            width: fit-content;
+            /*height: 300px;*/
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        /* Style the buttons inside the tab */
+        #ac80b6a0325e4ec0b29019aefc556128 .links button {
+            background-color: inherit;
+            display: block;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 22px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+            width: 100%;
+            text-align: start;
+        }
+
+        /* Change background color of buttons on hover */
+        #ac80b6a0325e4ec0b29019aefc556128 .links button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        #ac80b6a0325e4ec0b29019aefc556128 .links button.active {
+            background-color: #ccc;
+        }
+
+        /* Style the tab content */
+        #ac80b6a0325e4ec0b29019aefc556128 .tabcontent {
+            float: left;
+            padding: 0px 12px;
+            width: 70%;
+            border-right: 1px solid #ccc;
+            /*border-right: none;*/
+            animation: fadeEffect 0.5s;
+            /*height: 300px;*/
+            max-height: 70vh;
+            overflow: auto;
+        }
+
+        @@keyframes fadeEffect {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        #ac80b6a0325e4ec0b29019aefc556128 .main-box {
+            border-right: 1px solid gray;
+            float: right;
+            margin: 10px;
+        }
+
+        /* Customize the label (the container) */
+        #ac80b6a0325e4ec0b29019aefc556128 .container {
+            display: block;
+            position: relative;
+            padding-right: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 22px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            text-wrap: nowrap;
+        }
+
+        /* Hide the browser's default radio button */
+        #ac80b6a0325e4ec0b29019aefc556128 .container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        /* Create a custom radio button */
+        #ac80b6a0325e4ec0b29019aefc556128 .checkmark {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 25px;
+            width: 25px;
+            background-color: #eee;
+            border-radius: 50%;
+        }
+
+        /* On mouse-over, add a grey background color */
+        #ac80b6a0325e4ec0b29019aefc556128 .container:hover input~.checkmark {
+            background-color: #ccc;
+        }
+
+        /* When the radio button is checked, add a blue background */
+        #ac80b6a0325e4ec0b29019aefc556128 .container input:checked~.checkmark {
+            background-color: #2196F3;
+        }
+
+        /* Create the indicator (the dot/circle - hidden when not checked) */
+        #ac80b6a0325e4ec0b29019aefc556128 .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        /* Show the indicator (dot/circle) when checked */
+        #ac80b6a0325e4ec0b29019aefc556128 .container input:checked~.checkmark:after {
+            display: block;
+        }
+
+        /* Style the indicator (dot/circle) */
+        #ac80b6a0325e4ec0b29019aefc556128 .container .checkmark:after {
+            top: 9px;
+            left: 9px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+    </style>
+    <h1>لطفا عنوان عملکرد را از انتخاب کنید.</h1>
+
+    <div class="links">
+        @foreach (string mt in Model.performanceTypes.Keys)
+        {
+            <button class="tablink defaultOpen">@mt</button>
+        }
+    </div>
+
+    @foreach (var kv in Model.performanceTypes)
+    {
+        <div id="@kv.Key" class="tabcontent" style="display: none;">
+            <div class="clearfix" style="margin: 0; padding: 0;">
+                <h3 style="float: right;">@kv.Key</h3>
+            </div>
+
+            @foreach (string pt in kv.Value)
+            {
+                <label class="container">@pt
+                    <input type="radio" name="type-radiobox" onchange="if(this.checked){selectTitle(this);}">
+                    <span class="checkmark"></span>
+                </label>
+            }
+        </div>
+    }
+
+    <script>
+        let mainElements_Scriptd5b6b606f4934bdd8c8850bd3f2937ff = document.getElementsByClassName("Scriptd5b6b606f4934bdd8c8850bd3f2937ff");
+
+        for (let i = 0; i < mainElements_Scriptd5b6b606f4934bdd8c8850bd3f2937ff.length; i++) {
+            let mainElement = mainElements_Scriptd5b6b606f4934bdd8c8850bd3f2937ff.item(i);
+            let siblingTabLinks = mainElement.getElementsByClassName("tablink");
+            //let siblingTabContents = mainElements[i].getElementsByClassName("tabcontent");
+
+            //console.log("siblingTabLinks: " + siblingTabLinks.length);
+
+            for (let j = 0; j < siblingTabLinks.length; j++) {
+
+                let cityName = siblingTabLinks.item(j).innerHTML;
+
+                siblingTabLinks.item(j).addEventListener("click", function () {
+                    removeActive_Scriptd5b6b606f4934bdd8c8850bd3f2937ff(mainElement.id);
+
+                    setDisplayNone_Scriptd5b6b606f4934bdd8c8850bd3f2937ff(mainElement.id);
+
+                    mainElement.querySelector(`#${cityName}`).style.display = "block";
+                    siblingTabLinks.item(j).classList.add("active");
+                });
+            }
+
+            mainElement.querySelector(".defaultOpen").click();
+        }
+        // remove active From Sibling TabLinks' classList
+        function removeActive_Scriptd5b6b606f4934bdd8c8850bd3f2937ff(mainElementId) {
+            let mainElement = document.getElementById(mainElementId);
+            let siblingTabLinks = mainElement.getElementsByClassName("tablink");
+            for (let i = 0; i < siblingTabLinks.length; i++) {
+                siblingTabLinks[i].classList.remove("active");
+            }
+        }
+
+        // set display to none for all tabcontent element
+        function setDisplayNone_Scriptd5b6b606f4934bdd8c8850bd3f2937ff(mainElementId) {
+            let mainElement = document.getElementById(mainElementId);
+            let siblingTabContents = mainElement.getElementsByClassName("tabcontent");
+            for (let i = 0; i < siblingTabContents.length; i++) {
+                siblingTabContents[i].style.display = "none";
+            }
+        }
+    </script>
+</div>
+
+<div id="submit-box">
+    <style>
+        #submit-box {
+            text-align: center;
+            width: 35%;
+            float: left;
+            /*margin: 50vh 0 0 0;
+                transform: translateY(-50%);*/
+            margin: 100px auto 50px;
+            background-color: lightpink;
+            border-radius: 10px;
+            padding: 20px;
+            display: none;
+        }
+
+        #submit-box form {
+            text-align: center;
+            /*border: 1px solid gray;*/
+        }
+
+        #submit-box #submit-link {
+            text-decoration: none;
+            background-color: green;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            text-wrap: nowrap;
+            display: block;
+            width: fit-content;
+            margin: auto;
+            cursor: pointer;
+        }
+
+        #submit-box #submit-link:hover {
+            box-shadow: 0 0 5px green;
+        }
+
+        @@media screen and (max-width:800px) {
+            #submit-box {
+                float: none;
+            }
+        }
+    </style>
+    <form asp-action="SubmitNewPerformance" method="get">
+        <h3 style="padding: 0;margin: 0;">نوع عملکرد:</h3>
+        <input type="text" id="selected-type" required readonly name="type"
+            style="background-color: transparent;border: none;font-size: 20px;text-align: center;">
+        <div>
+            <h3 style="padding: 0;margin: 20px 0 0;">زمینه عملکرد:</h3>
+            <select required name="field"
+                style="background-color: transparent;border-radius: 5px;font-size: 20px;padding: 5px;">
+                <option value=""></option>
+                @foreach (string field in Model.performanceFields)
+                {
+                    <option value="@field">@field</option>
+                }
+            </select>
+        </div>
+        <button id="submit-link" type="submit" style="margin-top: 50px;">ثبت عملکرد</button>
+    </form>
+
+    <script>
+        function selectTitle(checkbox) {
+            let text = checkbox.parentElement.innerText;
+            document.getElementById("selected-type").value = text;
+            document.getElementById("submit-box").style.display = "block";
+        }
+    </script>
+</div>

@@ -1,0 +1,157 @@
+@model List<MyIdentityUser>
+
+<!----------------------------------------- Colleagues ----------------------------------------->
+
+<div id="colleagues3b15c9dad43c4a68951fe248998766fc">
+    <style>
+        #colleagues3b15c9dad43c4a68951fe248998766fc {
+            padding: 50px;
+            border: 1px solid gray;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        #colleagues3b15c9dad43c4a68951fe248998766fc::before {
+            content: "همکاران (@Model.Count)";
+            position: absolute;
+            top: -20px;
+            background-color: white;
+            padding: 5px;
+            font-size: 20px;
+            font-weight: bold;
+            border: 1px solid gray;
+        }
+    </style>
+
+    <!----------------------------------------- members ----------------------------------------->
+    @foreach (MyIdentityUser user in Model)
+    {
+        <div class="clearfix" style="position: relative;">
+            <div class="img-box">
+                <style>
+                    #colleagues3b15c9dad43c4a68951fe248998766fc .img-box {
+                        padding: 10px;
+                        box-shadow: 5px 5px 10px gray;
+                        /*max-width: 300px;*/
+                        width: 300px;
+                        float: right;
+                    }
+                </style>
+                <img src="/Account/ClientImage?username=@(user.UserName)&v=@user.Version" alt="" style="width: 100%;">
+            </div>
+            <style>
+                #colleagues3b15c9dad43c4a68951fe248998766fc .title-box,
+                #colleagues3b15c9dad43c4a68951fe248998766fc .description-box,
+                #colleagues3b15c9dad43c4a68951fe248998766fc .star-box {
+                    width: calc(100% - 400px);
+                    float: right;
+                    margin-right: 5vw;
+                    font-size: 20px;
+                }
+            </style>
+            <div class="title-box clearfix">
+                <style>
+                    @@media screen and (max-width:600px) {
+                        #colleagues3b15c9dad43c4a68951fe248998766fc .title-box {
+                            width: 100%;
+                            margin-right: 0;
+                        }
+                    }
+                </style>
+                <p style="font-size: 20px;font-weight: bold;float: right;margin-left: 50px;">@user.FullName</p>
+                <p style="font-size: 20px;font-weight: bold;float: right;margin-left: 50px;">محل خدمت: @user.Branch</p>
+                <p style="font-size: 20px;font-weight: bold;float: right;margin-left: 50px;">سمت: @user.Post</p>
+                @if (user.PerformanceField.Any())
+                {
+                    <p style="font-size: 20px;font-weight: bold;float: right;margin-left: 50px;">
+                        زمینه فعالیت:
+                        @foreach (string field in user.PerformanceField)
+                        {
+                            @field
+
+                            @:,
+                        }
+                    </p>
+                }
+            </div>
+            <div class="clearfix description-box">
+                <style>
+                    #colleagues3b15c9dad43c4a68951fe248998766fc .description-box {
+                        color: rgb(29, 51, 51);
+                        text-align: start;
+                    }
+
+                    #colleagues3b15c9dad43c4a68951fe248998766fc .description-box pre {
+                        max-width: 100%;
+                        text-wrap: wrap;
+                    }
+
+                    @@media screen and (max-width:1000px) {
+                        #colleagues3b15c9dad43c4a68951fe248998766fc .description-box {
+                            width: 100%;
+                            margin-right: 0;
+                        }
+                    }
+                </style>
+                @if (user.Description == string.Empty)
+                {
+                    <pre>معرفی و توضیحات ...</pre>
+                }
+                else
+                {
+                    <pre>@user.Description</pre>
+                }
+            </div>
+            <div class="btn-container clearfix">
+                <style>
+                    .btn-container {
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                    }
+
+                    .btn-container #sendMessage {
+                        padding: 10px;
+                        color: #111;
+                        border: 1px solid lawngreen;
+                        background-color: white;
+                        text-decoration: none;
+                        cursor: pointer;
+                    }
+
+                    .btn-container #sendMessage:hover {
+                        background-color: lawngreen;
+                    }
+
+                    .btn-container a {
+                        float: left;
+                        margin: 0 5px;
+                        padding: 10px;
+                        color: #111;
+                        border: 1px solid skyblue;
+                        background-color: white;
+                        text-decoration: none;
+                        cursor: pointer;
+                        border-radius: 5px;
+                    }
+
+                    .btn-container a:hover {
+                        /*color: white;*/
+                        background-color: lightblue;
+                    }
+                </style>
+                @if (User.Identity?.Name != user.UserName)
+                {
+                    <a id="sendMessage" asp-controller="Messages" asp-action="NewMessage"
+                        asp-route-toUserGuid="@user.UserGuid">ارسال پیام</a>
+                }
+                <a asp-controller="Account" asp-action="Profile" asp-route-userGuid="@user.UserGuid">مشاهده پروفایل</a>
+
+            </div>
+        </div>
+        <hr style="margin: 30px 0;">
+    }
+
+    <!---------------- Pagination ----------------->
+    <partial name="Pagination" />
+</div>

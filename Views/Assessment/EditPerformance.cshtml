@@ -1,0 +1,393 @@
+@model Assessment_PerformanceForm
+
+<!------------------------------------------------------------------>
+<div id="cbc724a1a02c47dea6a722260c71d5ac">
+    <link rel="stylesheet" type="text/css" href="/Codes/jalalidatepicker.min.css" />
+    <script type="text/javascript" src="/Codes/jalalidatepicker.min.js"></script>
+
+    <style>
+        #cbc724a1a02c47dea6a722260c71d5ac {
+            width: 80vw;
+            height: fit-content;
+            background-color: white;
+            margin: 50px auto;
+            box-shadow: 0 0 3px lightgray;
+            padding: 20px;
+            position: relative;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac::before {
+            content: "ویرایش عملکرد";
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 0 3px lightgray;
+            padding: 10px 20px;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box {
+            border: 2px solid rgb(220, 220, 220, 0.5);
+            padding: 10px 15px;
+            border-radius: 5px;
+            float: right;
+            margin: 2%;
+            height: fit-content;
+            min-height: 75px;
+            background-color: white;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box.one {
+            width: 96%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box.two {
+            width: 46%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box.three {
+            width: 29.3%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box label {
+            display: block;
+            width: 100%;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box label span {
+            float: left;
+            color: red;
+            font-size: 18px;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box input,
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box select,
+        #cbc724a1a02c47dea6a722260c71d5ac .input-box textarea {
+            border: none;
+            padding: 10px 0 0 0;
+            font-size: 18px;
+            width: 100%;
+            max-width: 100%;
+            min-width: 100%;
+            color: #444;
+            /*text-transform: uppercase;*/
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container {
+            width: 100%;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container a,
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container button {
+            float: right;
+            padding: 15px 30px;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            background-color: rgb(105, 29, 105);
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin: 2%;
+            display: block;
+            width: 25%;
+            opacity: 0.8;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container a {
+            background-color: gray;
+        }
+
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container a:hover,
+        #cbc724a1a02c47dea6a722260c71d5ac .button-container button:hover {
+            opacity: 1;
+        }
+
+        @@media screen and (max-width: 800px) {
+            #cbc724a1a02c47dea6a722260c71d5ac {
+                width: 100%;
+            }
+        }
+
+        @@media screen and (max-width: 600px) {
+
+            #cbc724a1a02c47dea6a722260c71d5ac .input-box.one {
+                width: 96%;
+            }
+
+            #cbc724a1a02c47dea6a722260c71d5ac .input-box.two {
+                width: 96%;
+            }
+
+            #cbc724a1a02c47dea6a722260c71d5ac .input-box.three {
+                width: 96%;
+            }
+        }
+    </style>
+
+    <form id="form_cbc724a1a02c47dea6a722260c71d5ac" asp-action="SubmitPerformanceForm" method="post"
+        enctype="multipart/form-data" onsubmit="AJAXSubmit(this);event.preventDefault();return false;">
+        <input type="hidden" asp-for="Guid">
+        <div class="clearfix">
+            <div class="input-box two">
+                <label>نوع عملکرد</label>
+                <input disabled type="text" asp-for="PerformanceType">
+            </div>
+            <div class="input-box two">
+                <label>زمینه عملکرد</label>
+                <input disabled type="text" asp-for="PerformanceField">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box two">
+                <label asp-for="PerformDate">تاریخ انجام عملکرد</label>
+                <input type="text" data-jdp asp-for="PerformDate">
+            </div>
+            <div class="input-box two">
+                <label>تاریخ ثبت عملکرد</label>
+                <input disabled type="text" asp-for="RegisterDate">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box three">
+                <label>اداره</label>
+                <input disabled type="text" asp-for="Branch">
+            </div>
+            <div class="input-box three">
+                <label>رئیس اداره</label>
+                <input disabled type="text" asp-for="ChiefFullName">
+            </div>
+            <div class="input-box three">
+                <label>ثبت کننده </label>
+                <input disabled type="text" asp-for="RegistrarFullName">
+            </div>
+        </div>
+        <!--div class="clearfix">
+            <div class="input-box two">
+                <label>سمت رئیس</label>
+                <input disabled type="text" asp-for="ChiefPost">
+            </div>
+            <div class="input-box two">
+                <label>سمت ثبت کننده</label>
+                <input disabled type="text" asp-for="RegistrarPost">
+            </div>
+        </div-->
+        <div class="clearfix">
+            <div class="input-box one">
+                <label asp-for="Subject">موضوع عملکرد </label>
+                <input type="text" asp-for="Subject">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box one">
+                <label asp-for="Attendees">حاضرین </label>
+                <textarea asp-for="Attendees"></textarea>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box one">
+                <label asp-for="EventPlace">محل </label>
+                <input type="text" asp-for="EventPlace">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box two">
+                <label asp-for="StartTime">ساعت شروع </label>
+                <input type="text" asp-for="StartTime">
+            </div>
+            <div class="input-box two">
+                <label asp-for="EndTime">ساعت پایان </label>
+                <input type="text" asp-for="EndTime">
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box one">
+                <label asp-for="Description">شرح </label>
+                <textarea asp-for="Description"></textarea>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="input-box one">
+                <label asp-for="SecurityOpinion">نظریه حراست </label>
+                <textarea asp-for="SecurityOpinion"></textarea>
+            </div>
+        </div>
+        @if (Model.AttachedFileName != null)
+        {
+            <div class="clearfix">
+                <div class="input-box one">
+                    <label>فایل با نام "@Model.AttachedFileName" پیوست شده است.</label>
+                    <a asp-action="DeleteAttachedFile" asp-route-performanceGuid="@Model.Guid"
+                        style="text-decoration:none;border:none;border-radius:5px;padding:5px 10px;background-color:orange;display:block;margin:auto;width:fit-content;">
+                        حذف
+                    </a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="clearfix">
+                <div class="input-box one">
+                    <label for="file-input">پیوست </label>
+                    <input type="file" name="File" id="file-input">
+                </div>
+            </div>
+        }
+    </form>
+
+    <hr id="last-hr">
+
+    <div class="button-container clearfix">
+        <button type="submit" form="form_cbc724a1a02c47dea6a722260c71d5ac">ثبت</button>
+        <a asp-action="Performance" asp-route-guid="@Model.Guid">لغو</a>
+    </div>
+    <script>
+        jalaliDatepicker.startWatch({
+            //minDate: "attr",
+            //maxDate: "attr"
+            persianDigits: true,
+        });
+
+        async function AJAXSubmit(oFormElement) {
+            const formData = new FormData(oFormElement);
+            let request = new XMLHttpRequest();
+
+            request.upload.addEventListener("progress", e => {
+                let fileSize = document.getElementById("file-input").files[0]?.size || 0;
+                //let fileImageSize = document.getElementById("file-image-input").files[0]?.size || 0;
+                //let wholeSize = fileSize + fileImageSize;
+
+                if (e.loaded <= fileSize) {
+                    let percent = Math.round(e.loaded / fileSize * 100);
+                    document.getElementById("myBar-loaded").style.width = percent + "%";
+                    document.getElementById("progress-percent").innerHTML = percent;
+                }
+                if (e.loaded == e.total) {
+                    document.getElementById("myBar-loaded").style.width = "100%";
+                    document.getElementById("progress-percent").innerHTML = "100";
+                }
+            });
+
+            request.onreadystatechange = () => {
+                //console.log("request.status: " + request.status);
+                if (request.readyState == XMLHttpRequest.DONE && request.status >= 200 && request.status < 400) {
+                    window.location.href = request.responseText;
+                }
+                else {
+                    console.log(request.responseText);
+                }
+            };
+
+            request.open("post", oFormElement.action);
+            request.setRequestHeader("RequestVerificationToken", getCookie('RequestVerificationToken'));
+            request.send(formData);
+
+            document.getElementById("modal1213276e57b2420cb55e23702f8e24da").style.display = "block";
+
+        }
+
+        function getCookie(name) {
+            let value = "; " + document.cookie;
+            let parts = value.split("; " + name + "=");
+            let myCookie;
+            if (parts.length == 2) {
+                myCookie = parts.pop().split(";").shift();
+            }
+
+            return myCookie;
+        }
+
+    </script>
+</div>
+<div id="modal1213276e57b2420cb55e23702f8e24da">
+    <style>
+        #modal1213276e57b2420cb55e23702f8e24da {
+            backdrop-filter: blur(5px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 1;
+            display: none;
+        }
+    </style>
+    <!--------------------------- spinner ---------------------------->
+    <style>
+        #m992017b8baba4208b747f40bd488dc69 {
+            width: fit-content;
+            margin: 35vh auto 0;
+            translate: 0 -50%;
+            text-align: center;
+        }
+
+        #m992017b8baba4208b747f40bd488dc69 .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin_m992017b8baba4208b747f40bd488dc69 2s linear infinite;
+            /* Safari */
+            animation: spin_m992017b8baba4208b747f40bd488dc69 2s linear infinite;
+        }
+
+        /* Safari */
+        @@-webkit-keyframes spin_m992017b8baba4208b747f40bd488dc69 {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @@keyframes spin_m992017b8baba4208b747f40bd488dc69 {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <div id="m992017b8baba4208b747f40bd488dc69">
+        <div class="loader"></div>
+        در حال ارسال ...
+    </div>
+
+    <!----------------------------- progress bar ----------------------------->
+    <style>
+        #m5e9e3470935f47c6a63b7765d950f2cf {
+            width: 60%;
+            margin: auto;
+        }
+
+        #m5e9e3470935f47c6a63b7765d950f2cf #myProgress {
+            width: 100%;
+            background-color: #ddd;
+        }
+
+        #m5e9e3470935f47c6a63b7765d950f2cf #myBar-loaded {
+            width: 1%;
+            height: 30px;
+            background-color: #04AA6D;
+        }
+    </style>
+
+    <div id="m5e9e3470935f47c6a63b7765d950f2cf">
+        <div id="myProgress">
+            <div id="myBar-loaded"></div>
+        </div>
+        <p style="text-align: center;"><span id="progress-percent">1</span> %</p>
+    </div>
+
+
+</div>

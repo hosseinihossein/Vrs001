@@ -1,0 +1,227 @@
+@model Orders_ReportModel
+@{
+    List<string> AllBranches = Context.RequestServices.GetRequiredService<IConfiguration>()
+    .GetSection("AllBranches").Get<List<string>>() ?? [];
+}
+
+<!-------------------------------------------------->
+<link rel="stylesheet" type="text/css" href="/Codes/jalalidatepicker.min.css" />
+<script type="text/javascript" src="/Codes/jalalidatepicker.min.js"></script>
+
+<div id="button-container" class="clearfix">
+    <style>
+        #button-container {
+            width: 90%;
+            margin: auto;
+        }
+
+        @@media screen and (max-width: 1200px) {
+            #button-container {
+                width: 100%;
+            }
+        }
+
+        #button-container a,
+        #button-container button {
+            /*float: right;*/
+            padding: 10px 10px;
+            color: white;
+            font-size: 14px;
+            /*font-weight: 500;*/
+            background-color: rgb(105, 29, 105);
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            margin: 10px;
+            display: inline-block;
+            width: fit-content;
+            opacity: 0.8;
+            text-align: center;
+        }
+
+        /*#button-container a {
+                background-color: gray;
+            }*/
+
+        #button-container a:hover,
+        #button-container button:hover {
+            opacity: 1;
+        }
+
+        #button-container input,
+        #button-container select {
+            padding: 10px 10px;
+            border-radius: 5px;
+            border: 1px solid gray;
+            width: 150px;
+        }
+    </style>
+    <!--a href="" style="float: left;">ثبت درخواست جدید</a-->
+
+    <form action="ReportPerformances">
+        <input type="text" data-jdp asp-for="FromDate" placeholder="از تاریخ..">
+        <input type="text" data-jdp asp-for="ToDate" placeholder="تا تاریخ..">
+        <button type="submit">جستجو</button>
+    </form>
+
+    <p style="background-color: white;width: fit-content;margin: 5px 0;padding: 1px;color: #111;">
+        گزارش عملکرد همه توابع به درخواست ها
+        <span>از تاریخ <span style="background-color: rgba(255, 165, 0, 0.5)">@Model.FromDate</span></span>
+        @if (Model.ToDate == null)
+        {
+            <span>تا امروز</span>
+        }
+        else
+        {
+            <span>تا تاریخ <span style="background-color: rgba(255, 165, 0, 0.5)">@Model.ToDate</span></span>
+        }
+    </p>
+</div>
+<script>
+    jalaliDatepicker.startWatch({
+        //minDate: "attr",
+        //maxDate: "attr"
+        persianDigits: true,
+    });
+</script>
+
+<div id="c0b042c7b31f4e06b9fecddf8973b51c">
+    <style>
+        #c0b042c7b31f4e06b9fecddf8973b51c {
+            width: 90%;
+            margin: 20px auto;
+            overflow: auto;
+        }
+
+        @@media screen and (max-width:1200px) {
+            #c0b042c7b31f4e06b9fecddf8973b51c {
+                width: 100%;
+            }
+        }
+
+        #c0b042c7b31f4e06b9fecddf8973b51c table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #c0b042c7b31f4e06b9fecddf8973b51c table td,
+        #c0b042c7b31f4e06b9fecddf8973b51c table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            /*text-wrap: nowrap;*/
+        }
+
+        #c0b042c7b31f4e06b9fecddf8973b51c table td:first-child {
+            /*text-wrap: nowrap;*/
+            max-width: 500px;
+            min-width: 200px;
+        }
+
+        #c0b042c7b31f4e06b9fecddf8973b51c table td:not(:first-child) {
+            font-size: 14px;
+        }
+
+        #c0b042c7b31f4e06b9fecddf8973b51c table td.green {
+            background-color: rgba(124, 252, 0, 1);
+        }
+
+        #c0b042c7b31f4e06b9fecddf8973b51c table td.orange {
+            background-color: rgba(255, 165, 0, 1);
+        }
+
+        #c0b042c7b31f4e06b9fecddf8973b51c table td.red {
+            background-color: rgba(255, 0, 0, 1);
+        }
+
+        #c0b042c7b31f4e06b9fecddf8973b51c table td a {
+            text-decoration: none;
+            /*background-color: rgb(204, 255, 238);*/
+            color: blue;
+            /*padding: 10px 20px;
+                border: 1px solid orange;
+                border-radius: 10px;*/
+        }
+
+        #c0b042c7b31f4e06b9fecddf8973b51c table td a:hover {
+            /*background-color: orange;*/
+            /*color: rgb(41, 67, 218);*/
+            text-decoration: underline;
+        }
+
+        #c0b042c7b31f4e06b9fecddf8973b51c table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #c0b042c7b31f4e06b9fecddf8973b51c table tr:not(:first-child) {
+            opacity: 0.8;
+        }
+
+        #c0b042c7b31f4e06b9fecddf8973b51c table tr:hover {
+            opacity: 1;
+        }
+
+        #c0b042c7b31f4e06b9fecddf8973b51c table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: #04AA6D;
+            color: white;
+        }
+    </style>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>موضوع درخواست</th>
+                @foreach (string branch in AllBranches)
+                {
+                    <th>@branch</th>
+                }
+            </tr>
+            @foreach (Orders_DbModel order in Model.Orders)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Orders" asp-action="Open" asp-route-orderGuid="@order.Guid">@order.Subject</a>
+                    </td>
+                    @foreach (string branch in AllBranches)
+                    {
+                        string bgColor = "";
+                        if (Model.BranchOrderGuidRespondDates[branch].ContainsKey(order.Guid))
+                        {
+                            if (Model.BranchOrderGuidRespondDates[branch][order.Guid] == null)
+                            {
+                                bgColor = "red";
+                            }
+                            else if (Model.BranchOrderGuidRespondDates[branch][order.Guid] <= order.Deadline)
+                            {
+                                bgColor = "green";
+                            }
+                            else
+                            {
+                                bgColor = "orange";
+                            }
+                            if (bgColor == "red")
+                            {
+                                <td class="@bgColor">@branch</td>
+                            }
+                            else
+                            {
+                                <td class="@bgColor">
+                                    <a asp-controller="Assessment" asp-action="ListOfPerformances" asp-route-Branch="@branch"
+                                        asp-route-orderGuid="@order.Guid">@branch</a>
+                                </td>
+                            }
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

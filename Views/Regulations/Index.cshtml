@@ -1,0 +1,223 @@
+@model List<Regulations_DbModel>
+@{
+    //string category = ViewBag.SameCategory ? Model[0].Category : "همه";
+    //ViewBag.DisplayMedia_Info
+
+}
+<!----------------------------------  -------------------------------------->
+<div id="main-div">
+    <style>
+        #main-div {
+            width: 80%;
+            margin: 50px auto;
+        }
+
+        @@media screen and (max-width:800px) {
+            #main-div {
+                width: 100%;
+                margin: 0px auto;
+            }
+        }
+
+        #accordion001b383eb0bc47169304f8afa1f9a7e1 .accordion {
+            background-color: #eee;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: right;
+            outline: none;
+            font-size: 20px;
+            transition: 0.4s;
+        }
+
+        #accordion001b383eb0bc47169304f8afa1f9a7e1 .accordion.active,
+        #accordion001b383eb0bc47169304f8afa1f9a7e1 .accordion:hover {
+            background-color: #ccc;
+        }
+
+        #accordion001b383eb0bc47169304f8afa1f9a7e1 .panel {
+            padding: 0 18px;
+            background-color: white;
+            overflow: hidden;
+            max-height: 0;
+            transition: all 0.2s ease-out;
+            border: 1px solid #ccc;
+            font-size: 18px;
+        }
+
+        #accordion001b383eb0bc47169304f8afa1f9a7e1 .accordion:after {
+            content: '\02795';
+            /* Unicode character for "plus" sign (+) */
+            font-size: 13px;
+            color: #777;
+            float: left;
+            margin-left: 5px;
+        }
+
+        #accordion001b383eb0bc47169304f8afa1f9a7e1 .accordion.active:after {
+            content: "\2796";
+            /* Unicode character for "minus" sign (-) */
+        }
+
+        .aaaeac1d0412845af9342f834ab4f644e {
+            background-color: white;
+            border: 1px solid #04AA6D;
+            border-radius: 5px;
+            color: black;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .aaaeac1d0412845af9342f834ab4f644e:hover {
+            background-color: #04AA6D;
+            border-color: white;
+            color: white;
+        }
+
+        .a6c39055a7fbd48aa8de324d489c2afd0 {
+            background-color: white;
+            border: 1px solid red;
+            border-radius: 5px;
+            color: black;
+            padding: 10px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            float: left;
+        }
+
+        .a6c39055a7fbd48aa8de324d489c2afd0:hover {
+            background-color: red;
+            border-color: white;
+            color: white;
+        }
+    </style>
+
+    <div id="accordion001b383eb0bc47169304f8afa1f9a7e1">
+
+        <!----------------------------------------- add regulation ----------------------------------------->
+        <div>
+            <style>
+                .addNewRegulation-btn {
+                    font-size: 24px;
+                    text-decoration: none;
+                    border: 1px solid gray;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                }
+
+                .addNewRegulation-btn:hover {
+                    color: lawngreen;
+                }
+
+                #hr5012ee2da3a449a78539e32f813e132c {
+                    margin: 50px 0;
+                    overflow: visible;
+                    position: relative;
+                }
+
+                #hr5012ee2da3a449a78539e32f813e132c::after {
+                    content: "@(Html.Raw(Context.Request.Query["category"].ToString()))(@Model.Count)";
+                    position: absolute;
+                    top: -15px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    font-weight: bold;
+                    border: 1px solid gray;
+                    background-color: white;
+                    padding: 5px 10px;
+                }
+            </style>
+            @if (User.IsInRole("Regulations_Admins"))
+            {
+                <a asp-action="NewRegulation" class="addNewRegulation-btn">
+                    <i class="fa-solid fa-square-plus"></i> <span style="font-size: 16px;font-weight: bold;">
+                        اضافه کردن دستورالعمل</span>
+                </a>
+            }
+            <hr id="hr5012ee2da3a449a78539e32f813e132c">
+        </div>
+
+        <!---------------------------------- list regulations -------------------------------------->
+        @foreach (Regulations_DbModel reg in Model)
+        {
+            <button class="accordion Script8145dfe532594b45aefd0a1782bed213">
+                @reg.Title
+            </button>
+            <div class="panel">
+                <p>@reg.BriefDescription</p>
+                <div>
+                    @if (reg.AttachedFileName is not null)
+                    {
+                        <a download="" asp-action="Download" asp-route-regulationGuid="@reg.Guid"
+                            class="aaaeac1d0412845af9342f834ab4f644e">
+                            دریافت دستورالعمل
+                        </a>
+
+                        bool attachedMediaFile =
+                        ((DisplayMedia_Info)ViewBag.DisplayMedia_Info).ImageFormats.Any(f =>
+                        reg.AttachedFileName.EndsWith(f.ToLower())) ||
+                        ((DisplayMedia_Info)ViewBag.DisplayMedia_Info).VideoFormats.Any(f =>
+                        reg.AttachedFileName.EndsWith(f.ToLower()));
+
+                        bool attachedPdfFile = reg.AttachedFileName.ToLower().EndsWith(".pdf");
+
+                        @if (attachedMediaFile)
+                        {
+                            <a asp-action="DisplayMedia" asp-route-regulationGuid="@reg.Guid"
+                                class="aaaeac1d0412845af9342f834ab4f644e">
+                                مشاهده فایل رسانه
+                            </a>
+                        }
+                        else if (attachedPdfFile)
+                        {
+                            <a asp-action="Download" asp-route-regulationGuid="@reg.Guid" class="aaaeac1d0412845af9342f834ab4f644e"
+                                target="_blank">
+                                مشاهده فایل پی دی اف
+                            </a>
+                        }
+                    }
+                    @if (User.IsInRole("Regulations_Admins"))
+                    {
+                        <a asp-action="Delete" asp-route-regulationGuid="@reg.Guid" class="a6c39055a7fbd48aa8de324d489c2afd0">
+                            حذف <span style="color: darkred;font-size: 24px;">&times;</span>
+                        </a>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    let accordions_Script8145dfe532594b45aefd0a1782bed213 = document.getElementsByClassName("Script8145dfe532594b45aefd0a1782bed213");
+
+    for (let i = 0; i < accordions_Script8145dfe532594b45aefd0a1782bed213.length; i++) {
+        accordions_Script8145dfe532594b45aefd0a1782bed213[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            let panel = this.nextElementSibling;
+            if (parseInt(panel.style.maxHeight) > 0) {
+                panel.style.maxHeight = null;
+            } else {
+                panel.style.maxHeight = (panel.scrollHeight + 10) + "px";
+            }
+            //console.log(panel.style.maxHeight);
+        });
+    }
+
+    //document.getElementById("hr5012ee2da3a449a78539e32f813e132c").
+</script>
